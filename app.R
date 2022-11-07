@@ -50,7 +50,7 @@ ui <- list(
         menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
         menuItem("Example", tabName = "example", icon = icon("book-open-reader")),
-        menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
+        # menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
       tags$div(
@@ -420,7 +420,7 @@ server <- function(input, output, session) {
    
 
 
-## DataInterpretation
+### Data Interpretation ----
 observeEvent(
   eventExpr = input$interactionType,
   handlerExpr = {
@@ -431,7 +431,7 @@ observeEvent(
           \\[E(Y) = 5.7944 - 0.5351 X_1 - 0.3428 X_2 + 1.7255(X_1 X_2)\\]
           To test whether 
           the interaction between Advertising and Competitors is significant, we make a 
-          hypothesis that H0:\\(\\beta_3\\)=0 vs H1:\\(\\beta_3\\)≠0. The test statistic for this 
+          hypothesis that H0: \\(\\beta_3=0\\) vs H1: \\(\\beta_3\\neq 0\\). The test statistic for this 
           hypothesis is 0.644, and the p-value is 0.5246, so we fail to reject 
           the null hypothesis, indicating the interaction term is not significant 
           in this case.")
@@ -440,7 +440,7 @@ observeEvent(
           into our model:
           \\[E(Y) = 0.03838 + 0.13798 X_1 - 2.72064 X_2 + 0.07432(X_1 X_2)\\]
           We can do the same thing we did in the last one, we make a hypothesis 
-          that H0:\\(\\beta_3\\)=0 vs H1:\\(\\beta_3\\)≠0.The test statistic for this hypothesis 
+          that H0: \\(\\beta_3=0\\) vs H1: \\(\\beta_3\\neq 0\\). The test statistic for this hypothesis 
           is 2.717, and the p-value is 0.0112. Since the p-value is small,
           we can reject the null hypothesis, indicating the interaction 
           term is significant in the binary & continuous case.")
@@ -449,13 +449,15 @@ observeEvent(
           into our model:
           \\[E(Y) = 0.4975 + 0.1268 X_1 - 0.0240 X_2 + 0.0006(X_1 X_2)\\]
           Same as what we did previously, we make a hypothesis that 
-          H0:\\(\\beta_3\\)=0 vs H1:\\(\\beta_3\\)≠0.
+          H0: \\(\\beta_3=0\\) vs H1: \\(\\beta_3\\neq 0\\) .
           The test statistic for this hypothesis is 2.246, and the p-value is 
           0.0328. Since the p-value is small, we can reject the null hypothesis,
           indicating the interaction term is significant in the continuous 
           & continuous case.")
       }
     })
+    
+    boastUtils::typesetMath(session = session)
   }
 )
  
