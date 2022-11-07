@@ -1,26 +1,39 @@
-# Load Packages ----
+#Load Packages ----
 library(shiny)
 library(shinydashboard)
 library(shinyBS)
 library(shinyWidgets)
+library(plyr)
 library(boastUtils)
+library(ggplot2)
+library(dplyr)
+library(readxl)
+library(tidyverse)
+# library(ggiraph)
+# library(ggiraphExtra)
+library(plotly)
+library(shinythemes)
+library(boastUtils)
+library(DT)
 
-# Load additional dependencies and setup functions
-# source("global.R")
+## Load in data
+SampleData2 <- read_excel("./SampleData2.xlsx")
+source("popPicker.R")
+maxPaths<-3
 
 # Define UI for App ----
 ui <- list(
   ## Create the app page ----
   dashboardPage(
-    skin = "blue",
+    skin = "green",
     ### Create the app header ----
     dashboardHeader(
-      title = "App Template", # You may use a shortened form of the title here
+      title = "Multiplicative Interaction", # You may use a shortened form of the title here
       titleWidth = 250,
       tags$li(class = "dropdown", actionLink("info", icon("info"))),
       tags$li(
         class = "dropdown",
-        boastUtils::surveyLink(name = "App_Template")
+        boastUtils::surveyLink(name = "Multiplicative Interaction")
       ),
       tags$li(
         class = "dropdown",
@@ -36,15 +49,14 @@ ui <- list(
         id = "pages",
         menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
+        menuItem("Example", tabName = "example", icon = icon("book-open-reader")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
-        menuItem("Challenge", tabName = "challenge", icon = icon("cogs")),
-        menuItem("Game", tabName = "game", icon = icon("gamepad")),
-        menuItem("Wizard", tabName = "wizard", icon = icon("hat-wizard")),
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
       tags$div(
         class = "sidebar-logo",
-        boastUtils::sidebarFooter()
+        # boastUtils::sidebarFooter()
+        boastUtils::psu_eberly_logo("reversed")
       )
     ),
     ### Create the content ----
@@ -54,19 +66,18 @@ ui <- list(
         tabItem(
           tabName = "overview",
           withMathJax(),
-          h1("Sample Application for BOAST Apps"), # This should be the full name.
-          p("This is a sample Shiny application for BOAST. Remember, this page
-            will act like the front page (home page) of your app. Thus you will
-            want to have this page catch attention and describe (in general terms)
-            what the user can do in the rest of the app."),
+          h1("Multiplicative Interaction"), # This should be the full name.
+          br(),
+          p("In this app, you will learn three parts in Interaction Term Regression Models:"),
+          p("1. Interactions between binary regression."),
+          p("2. Interaction between binary variable and a continuous variable"),
+          p("3. Interaction between continuous regressors."),
+          br(),
           h2("Instructions"),
-          p("This information will change depending on what you want to do."),
-          tags$ol(
-            tags$li("Review any prerequiste ideas using the Prerequistes tab."),
-            tags$li("Explore the Exploration Tab."),
-            tags$li("Challenge yourself."),
-            tags$li("Play the game to test how far you've come.")
-          ),
+          p("1. Review any prerequiste ideas using the Prerequistes tab."),
+          p("2. Play the game to test how far you've come."),
+          br(),
+          
           ##### Go Button--location will depend on your goals
           div(
             style = "text-align: center;",
@@ -78,7 +89,7 @@ ui <- list(
               style = "default"
             )
           ),
-          ##### Create two lines of space
+          ##### Create two lines of space----
           br(),
           br(),
           h2("Acknowledgements"),
@@ -106,123 +117,139 @@ ui <- list(
           p("In order to get the most out of this app, please review the
             following:"),
           tags$ul(
-            tags$li("Pre-req 1--Technical/Conceptual Prerequisites are ideas that
-                    users need to have in order to engage with your app fully."),
-            tags$li("Pre-req 2--Contextual Prerequisites refer to any information
-                    about a context in your app that will enrich a user's
-                    understandings."),
-            tags$li("Pre-req 3"),
-            tags$li("Pre-req 4")
+            tags$li("A linear regression model with multiplicative interaction for a response,",tags$em("Y")," with explanatory variables \\(X_1\\) and \\(X_2\\) takes the form:"),
+            p("\\[E(Y) = \\beta_0 + \\beta_1 X_1 + \\beta_2 X_2 + \\beta_3(X_1 X_2)\\]"),
+            p("So that the intercept \\(\\beta_0\\)  is the expected response when both \\(X_1\\) and \\(X_2\\) are zero;"),
+            p("\\(\\beta_1\\) is the increase in the average value of ",tags$em("Y")," per unit of \\(X_1\\) when \\(\\beta_3\\) and/or \\(X_2\\) is zero, (if you hold \\(X_2\\) fixed at some non-zero level \\(X_2\\) then the average value of ",tags$em("Y")," changes by \\(\\beta_1\\) + \\(\\beta_3\\ (X_2\\) per unit of \\(X_1\\));"),
+            p("\\(\\beta_2\\) is the increase in the average value of ",tags$em("Y")," per unit of \\(X_2\\) when \\(\\beta_3\\) and/or \\(X_1\\) is zero, (if you hold \\(X_1\\) fixed at some non-zero level \\(X_1\\) then the average value of ",tags$em("Y")," changes by \\(\\beta_2\\) + \\(\\beta_3\\ (X_1\\) per unit of \\(X_2\\))."),
+            p("Interpretation: When there is an interaction in the model, the degree to which a change in one
+of the X variables affects the expectation of ",tags$em("Y")," depends on the other X variable. The coefficient
+\\(\\beta_3\\) tells you how strong that dependency is."),
+tags$li("Special case: Suppose \\(X_2\\) is a binary variable that =1 if an event “A” happens and = 0 if it doesn’t.
+            \\(E(Y) = (\\beta_0 + \\beta_2)+ (\\beta_1 + \\beta_3) X_1\\) when A happens and
+            \\(E(Y) = \\beta_0 + \\beta_1 X_1\\) when it doesn't"),
           ),
-          p("Notice the use of an unordered list; users can move through the
-            list any way they wish."),
-          box(
-            title = strong("Null Hypothesis Significance Tests (NHSTs)"),
-            status = "primary",
-            collapsible = TRUE,
-            collapsed = TRUE,
-            width = '100%',
-            "In the Confirmatory Data Analysis tradition, null hypothesis
-            significance tests serve as a critical tool to confirm that a
-            particular theoretical model describes our data and to make a
-            generalization from our sample to the broader population
-            (i.e., make an inference). The null hypothesis often reflects the
-            simpler of two models (e.g., 'no statistical difference',
-            'there is an additive difference of 1', etc.) that we will use to
-            build a sampling distribution for our chosen estimator. These
-            methods let us test whether our sample data are consistent with this
-            simple model (null hypothesis)."
-          ),
-          box(
-            title = strong(tags$em("p"), "-values"),
-            status = "primary",
-            collapsible = TRUE,
-            collapsed = FALSE,
-            width = '100%',
-            "The probability that our selected estimator takes on a value at
-            least as extreme as what we observed given our null hypothesis. If
-            we were to carry out our study infinitely many times and the null
-            hypothesis accurately modeled what we're studying, then we would
-            expect for our estimator to produce a value at least as extreme as
-            what we have seen 100*(p-value)% of the time. The larger the
-            p-value, the more often we would expect our estimator to take on a
-            value at least as extreme as what we've seen; the smaller, the less
-            often."
+tags$ul(
+  tags$li("Special case of the special case: Suppose both \\(X_1\\) and \\(X_2\\) are binary variables and \\(X_1\\)=1 if an event “B” happens and = 0 if it doesn’t."),
+  p("In this case"),
+  p("\\(E(Y) = (\\beta_0 + \\beta_1  + \\beta_2  + \\beta_3)\\) when A and B both happen"),
+  p("\\(E(Y) = (\\beta_0 + \\beta_1 )\\) when B happens but A doesn't"),
+  p("\\(E(Y) = (\\beta_0 + \\beta_2 )\\) when A happens but B doesn't"),
+  p("\\(E(Y) = \\beta_0\\) when neither A nor B happen"),
+),
+br(),
+
+box(
+  title = strong("Interpretation on Special case"),
+  status = "primary",
+  collapsible = TRUE,
+  collapsed = TRUE,
+  width = '100%',
+  "The average value of Y is related to by one linear equation when A happens and by a different line when it doesn’t."
+),
+box(
+  title = strong("Interpretation on special case of the special case"),
+  status = "primary",
+  collapsible = TRUE,
+  collapsed = TRUE,
+  width = '100%',
+  "The average value of ",tags$em("Y")," changes by a constant amount that depends on whether the events A and B happen or not."
+),
+        ),
+
+
+#### Set up an Example Page ----
+tabItem(
+  tabName = "example",
+  withMathJax(),
+  h2("Example of Multiplicative Interaction"),
+  p("Interaction term were used when you believe the response 
+    of one predictor will change with the change of the other predictor. 
+    Then we can multiplied these factors together to form interaction 
+    terms."),
+  p("Instruction: 
+    Select the types of interaction you want to explore, then look 
+    at the plot and try to identify if there is interaction for predicting 
+    depth correspond to the following summary table of coefficients.
+    In addition, in this context, we treat Depth as dependent variable, which
+    is the value we want to estimate. The other four variables are predictors.
+    Absolute Distance from Meridian and Diameter are continuous variable,
+    Distance from Equator and Region are binary variable"),
+  br(),
+  
+  fluidRow(
+    column(
+      width = 4,
+      wellPanel(
+        selectInput(
+          inputId = "interactionType",
+          label = "Type of interaction",
+          choices = c(
+            "Binary & Binary" = 1,
+            "Binary & Continuous" = 2,
+            "Continuous & Continuous" = 3
           )
         ),
-        #### Note: you must have at least one of the following pages. You might
-        #### have more than one type and/or more than one of the same type. This
-        #### will be up to you and the goals for your app.
-        #### Set up an Explore Page ----
-        tabItem(
-          tabName = "explore",
-          withMathJax(),
-          h2("Explore the Concept"),
-          p("This page should include something for the user to do, the more
-            active and engaging, the better. The purpose of this page is to help
-            the user build a productive understanding of the concept your app
-            is dedicated to."),
-          p("Common elements include graphs, sliders, buttons, etc."),
-          p("The following comes from the NHST Caveats App:"),
-        ),
-        #### Set up a Challenge Page ----
-        tabItem(
-          tabName = "challenge",
-          withMathJax(),
-          h2("Challenge Yourself"),
-          p("The general intent of a Challenge page is to have the user take
-            what they learned in an Exploration and apply that knowledge in new
-            contexts/situations. In essence, to have them challenge their
-            understanding by testing themselves."),
-          p("What this page looks like will be up to you. Something you might
-            consider is to re-create the tools of the Exploration page and then
-            a list of questions for the user to then answer.")
-        ),
-        #### Set up a Game Page ----
-        tabItem(
-          tabName = "game",
-          withMathJax(),
-          h2("Practice/Test Yourself with [Type of Game]"),
-          p("On this type of page, you'll set up a game for the user to play.
-            Game types include Tic-Tac-Toe, Matching, and a version Hangman to
-            name a few. If you have ideas for new game type, please let us know.")
-        ),
-        #### Set up a Wizard Page ----
-        tabItem(
-          tabName = "wizard",
-          withMathJax(),
-          h2("Wizard"),
-          p("This page will have a series of inputs and questions for the user to
-            answer/work through in order to have the app create something. These
-            types of Activity pages are currently rare as we try to avoid
-            creating 'calculators' in the BOAST project.")
-        ),
-        #### Set up the References Page ----
-        tabItem(
-          tabName = "references",
-          withMathJax(),
-          h2("References"),
-          p("You'll need to fill in this page with all of the appropriate
+        # selectInput(
+        #   inputId = "Horizontal",
+        #   label = "Horizontal",
+        #   choices = c("Region(binary)",
+        #               "Distance_from_Equator(binary)",
+        #               "Diameter(continuous)",
+        #               "Absolute_Distance_from_Meridian(continuous)")
+        # ),
+        # selectInput(
+        #   inputId = "Color",
+        #   label = "Color",
+        #   choices = c("Region(binary)",
+        #               "Distance_from_Equator(binary)",
+        #               "Diameter(continuous)",
+        #               "Absolute_Distance_from_Meridian(continuous)"),
+        # )
+      ),
+    ),
+    column(
+      width = 8,
+      # plotOutput("plot1")
+      uiOutput("interactionPlotUI"),
+      dataTableOutput("exampleSummary"),
+      uiOutput("dataInterpretation"),
+      br(),
+    )
+  )
+),
+
+
+#### Set up an Explore Page ----
+
+
+#### Set up the References Page ----
+tabItem(
+  tabName = "references",
+  withMathJax(),
+  h2("References"),
+  p("You'll need to fill in this page with all of the appropriate
             references for your app."),
-          p(
-            class = "hangingindent",
-            "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
+  p(
+    class = "hangingindent",
+    "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
             (v0.61). [R package]. Available from
             https://CRAN.R-project.org/package=shinyBS"
-          ),
-          br(),
-          br(),
-          br(),
-          boastUtils::copyrightInfo()
-        )
+  ),
+  br(),
+  br(),
+  br(),
+  boastUtils::copyrightInfo()
+)
       )
     )
   )
 )
 
+
 # Define server logic ----
 server <- function(input, output, session) {
-
+  
   ## Set up Info button ----
   observeEvent(
     eventExpr = input$info,
@@ -235,8 +262,210 @@ server <- function(input, output, session) {
       )
     }
   )
+  
+  ## Example Page Elements ----
+  
+  ### Update Horizontal and Color ----
+  observeEvent(input$interactionType, {
+    
+    freezeReactiveValue(input, "Horizontal")
+    freezeReactiveValue(input, "Color")
+    
+    if (input$interactionType == 1) {
+      updateSelectInput(inputId = "Horizontal",  choices = "Distance from Equator")
+      updateSelectInput(inputId = "Color",  choices = "Region")
+    } else if (input$interactionType == 2) {
+      updateSelectInput(inputId = "Horizontal", choices = c("Diameter(m)"))
+      updateSelectInput(inputId = "Color",choices = c("Distance from Equator"))
+    } else if (input$interactionType == 3) {
+      updateSelectInput(inputId = "Horizontal", choices = c("Diameter(m)"))
+      updateSelectInput(inputId = "Color", choices = c("Absolute Distance from Meridian"))
+    }
 
-}
+    ### Plot ----
+    output$interactionPlotUI <- renderUI({
+      if (input$interactionType == 1 ) {
+        plotOutput("plot1")
+      } else if (input$interactionType == 2 ) {
+        plotOutput("plot2")
+      } else if (input$interactionType == 3 ) {
+        plotOutput("plot3")
+      }
+    })
+    
+    
+    ### exampleModel1
+    if(input$interactionType == 1) {
+      output$plot1<-renderPlot(
+        expr = {
+          
+          ggplot(
+            data = SampleData2,
+            mapping = aes(
+              x = Distance_from_Equator,
+              y = Depth,
+              color = Region,
+              group = Region
+            )
+          )+
+            geom_point(size=3) +
+            labs(title= "Depth and Distance from Equator",
+                 x= "Distance from Equator",
+                 y= "Depth(m)",
+                 color="Region"
+            ) +
+            stat_summary(fun = "mean", geom = "point") +
+            stat_summary(fun = "mean", geom = "line")+
+            theme(
+              legend.position = "bottom",
+              text=element_text(size=15))
+          
+        })
+    }
+    
+    
+    ### exampleModel2
+    if(input$interactionType == 2) {
+      output$plot2<-renderPlot({
+        
+        ggplot(
+          data = SampleData2,
+          mapping = aes(
+            x = Diameter,
+            y = Depth,
+            color = Distance_from_Equator,
+            group = Distance_from_Equator
+          )
+        )+
+          geom_point(size=3) +
+          labs(title= "Depth and Diameter",
+               x= "Diameter(m)",
+               y= "Depth(m)",
+               color="Distance from Equator"
+          ) +
+          geom_point() + geom_smooth(method = "lm", fill = NA)+
+          theme(legend.position = "bottom",
+                text=element_text(size=15))
+        
+      })
+    }
+    
+    ## exampleModel3
+    if(input$interactionType == 3) {
+      output$plot3<-renderPlot({
+        
+        ggplot(
+          data = SampleData2,
+          mapping = aes(
+            x = Diameter,
+            y = Depth,
+            color = Absolute_Distance_from_Meridian,
+            group = Absolute_Distance_from_Meridian
+          )
+        )+
+          geom_point(size=3) +
+          labs(title= "Depth and Diameter",
+               x= "Diameter(m)",
+               y= "Depth(m)",
+               color="Absolute Distance from Meridian"
+          ) +
+          geom_point() + geom_smooth(method = "lm", fill = NA)+
+          theme(legend.position = "bottom",
+                text=element_text(size=15))
+      })
+    }
+
+  ### Summary Table ----
+  observeEvent(
+    eventExpr = input$interactionType,
+    handlerExpr = {
+      if(input$interactionType == 1) {
+        exampleModel <- lm(
+          formula = Depth ~ Distance_from_Equator * Region,
+          data = SampleData2)
+      } else if(input$interactionType == 2 ) {
+        exampleModel <- lm(
+          formula = Depth ~ Diameter * Distance_from_Equator,
+          data = SampleData2)
+      } else if(input$interactionType == 3) {
+        exampleModel <- lm(
+          formula= Depth ~ Diameter * Absolute_Distance_from_Meridian,
+          data = SampleData2)
+      }
+      exampleCoeff <- round(summary(exampleModel)$coefficients, digits = 4)
+      
+      output$exampleSummary <- DT::renderDataTable(
+        expr = exampleCoeff,
+        caption = "Model Coefficients",
+        style = "bootstrap4",
+        rownames = TRUE,
+        options = list(
+          responsive = TRUE,
+          scrollX = TRUE,
+          ordering = FALSE,
+          paging = FALSE,
+          lengthChange = FALSE,
+          pageLength = 10,
+          searching = FALSE,
+          info = FALSE,
+          columnDefs = list(
+            list(className = "dt-center", targets = 1:ncol(exampleCoeff))
+          )
+        )
+      )
+    },
+    ignoreNULL = TRUE
+  )
+
+   
+
+
+## DataInterpretation
+observeEvent(
+  eventExpr = input$interactionType,
+  handlerExpr = {
+    output$dataInterpretation <- renderUI({
+      if (input$interactionType == 1) {
+        p("Based on the coeffitient table, we can get the fitted value 
+          into our model: 
+          \\[E(Y) = 5.7944 - 0.5351 X_1 - 0.3428 X_2 + 1.7255(X_1 X_2)\\]
+          To test whether 
+          the interaction between Advertising and Competitors is significant, we make a 
+          hypothesis that H0:\\(\\beta_3\\)=0 vs H1:\\(\\beta_3\\)≠0. The test statistic for this 
+          hypothesis is 0.644, and the p-value is 0.5246, so we fail to reject 
+          the null hypothesis, indicating the interaction term is not significant 
+          in this case.")
+      }else if (input$interactionType == 2) {
+        p("Based on the coeffitient table, we can get the fitted value 
+          into our model:
+          \\[E(Y) = 0.03838 + 0.13798 X_1 - 2.72064 X_2 + 0.07432(X_1 X_2)\\]
+          We can do the same thing we did in the last one, we make a hypothesis 
+          that H0:\\(\\beta_3\\)=0 vs H1:\\(\\beta_3\\)≠0.The test statistic for this hypothesis 
+          is 2.717, and the p-value is 0.0112. Since the p-value is small,
+          we can reject the null hypothesis, indicating the interaction 
+          term is significant in the binary & continuous case.")
+      } else if (input$interactionType == 3) {
+        p("Based on the coeffitient table, we can get the fitted value 
+          into our model:
+          \\[E(Y) = 0.4975 + 0.1268 X_1 - 0.0240 X_2 + 0.0006(X_1 X_2)\\]
+          Same as what we did previously, we make a hypothesis that 
+          H0:\\(\\beta_3\\)=0 vs H1:\\(\\beta_3\\)≠0.
+          The test statistic for this hypothesis is 2.246, and the p-value is 
+          0.0328. Since the p-value is small, we can reject the null hypothesis,
+          indicating the interaction term is significant in the continuous 
+          & continuous case.")
+      }
+    })
+  }
+)
+ 
+           
+  })
+}      
+
+
+## Explore Page ----
 
 # Boast App Call ----
 boastUtils::boastApp(ui = ui, server = server)
+
