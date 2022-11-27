@@ -11,7 +11,6 @@ library(readxl)
 library(tidyverse)
 # library(plotly)
 # library(shinythemes)
-library(boastUtils)
 library(DT)
 
 ## Load in data
@@ -248,15 +247,15 @@ tabItem(
             #   width = '100%'
             # ),
             p("Interactions between binary regressors"),
-            tags$strong("x value"),
-            sliderInput(
-              inputId = "x11",
-              label = "Distance from Meridian",
-              min = 0,
-              max = 1,
-              step = 1,
-              value =0
-            ),
+            # tags$strong("x value"),
+            # sliderInput(
+            #   inputId = "x11",
+            #   label = "Distance from Meridian",
+            #   min = 0,
+            #   max = 1,
+            #   step = 1,
+            #   value =0
+            # ),
             br(),
             bsButton(
               inputId = "newSample",
@@ -718,11 +717,12 @@ server <- function(input, output, session) {
     boastUtils::typesetMath(session = session)
     r <- reactiveValues(notice = "")
     ## Explore Page ----
+    
     #### Create Sample Data
     observeEvent(
       eventExpr = input$newSample,
       handlerExpr = {
-        r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 25),]
+        r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 60),]
         
         
       },
@@ -730,63 +730,72 @@ server <- function(input, output, session) {
       ignoreInit = TRUE
     )
     
+    
     #### Display sample plot
-    #### Display sample plot
+    #### Create Sample Data
+    observeEvent(
+      eventExpr = input$newSample,
+      handlerExpr = {
+        r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 60),]
+        
+        
+      },
+      ignoreNULL = TRUE,
+      ignoreInit = TRUE
+    )
+    
+    
+    #### Display sample plot1
     output$graphDisplay1 <- renderPlot(
       
       expr = {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot"
+            message = "Click on Generate New Sample to create a plot with interaction"
           )
         )
         
         tempData=r$tempData
+        test11<- lm(Depth ~ Distance_from_Equator + Region+ 
+                      Distance_from_Equator:Region, 
+                    data = tempData)
+        test12<- makePredictionData(test11)
         
-        if(input$x11==0){
-          ggplot(
-            data = tempData,
+        ggplot(
+          data = tempData,
+          mapping = aes(
+            x = Distance_from_Equator,
+            y = Depth,
+            color = Region,
+            group = Region
+          )
+        )+
+          # geom_jitter()+
+          theme_bw()+
+          geom_smooth(
+            inherit.aes = FALSE,
+            data = test12,
             mapping = aes(
               x = Distance_from_Equator,
               y = Depth,
               color = Region,
               group = Region
-            )
+            ),
+            formula = "y~x",
+            method = "lm"
           )+
-            geom_point(size=2.5) +
-            labs(title= "Depth and Distance from Equator with interaction",
-                 x= "Distance from Equator",
-                 y= "Depth (m)",
-                 color="Region"
-            ) +
-            stat_summary(fun = "mean", geom = "point") +
-            stat_summary(fun = "mean", geom = "line")+
-            theme(
-              legend.position = "bottom",
-              text=element_text(size=15))+geom_vline(xintercept =1,color="red" )
-        }else{
-          ggplot(
-            data = tempData,
-            mapping = aes(
-              x = Distance_from_Equator,
-              y = Depth,
-              color = Region,
-              group = Region
-            )
-          )+
-            geom_point(size=2.5) +
-            labs(title= "Depth and Distance from Equator with interaction",
-                 x= "Distance from Equator",
-                 y= "Depth (m)",
-                 color="Region"
-            ) +
-            stat_summary(fun = "mean", geom = "point") +
-            stat_summary(fun = "mean", geom = "line")+
-            theme(
-              legend.position = "bottom",
-              text=element_text(size=15))+geom_vline(xintercept =2,color="red" )
-        }
+          geom_point(size=2.5) +
+          labs(title= "Depth and Distance from Equator with interaction",
+               x= "Distance_from_Equator",
+               y= "Depth (m)",
+               color="Region"
+          ) +
+          stat_summary(fun = "mean", geom = "point") +
+          stat_summary(fun = "mean", geom = "line")+
+          theme(legend.position = "bottom",
+                text=element_text(size=15))+
+          geom_vline(xintercept =as.numeric(input$x3),color="red")
         
       }
     )
@@ -801,118 +810,32 @@ server <- function(input, output, session) {
           )
         )
         
-        tempData=r$tempData
-        if(input$x11==0){
-          ggplot(
-            data = tempData,
-            mapping = aes(
-              x = Distance_from_Equator,
-              y = Depth,
-              group = 1
-            )
-          )+
-            geom_point(size=2.5) +
-            labs(title= "Depth and Distance from Equator without interaction",
-                 x= "Distance from Equator",
-                 y= "Depth (m)",
-                 color="Region"
-            ) +
-            stat_summary(fun = "mean", geom = "point") +
-            stat_summary(fun = "mean", geom = "line")+
-            theme(
-              legend.position = "bottom",
-              text=element_text(size=15))+geom_vline(xintercept =1,color="red" )
-        }else{
-          ggplot(
-            data = tempData,
-            mapping = aes(
-              x = Distance_from_Equator,
-              y = Depth,
-              group = 1
-            )
-          )+
-            geom_point(size=2.5) +
-            labs(title= "Depth and Distance from Equator without interaction",
-                 x= "Distance from Equator",
-                 y= "Depth (m)",
-                 color="Region"
-            ) +
-            stat_summary(fun = "mean", geom = "point") +
-            stat_summary(fun = "mean", geom = "line")+
-            theme(
-              legend.position = "bottom",
-              text=element_text(size=15))+geom_vline(xintercept =2,color="red")
-        }
         
+        tempData=r$tempData
+        
+        fit1<- lm(Depth ~ Distance_from_Equator + Region,
+                  data = tempData)
+        Depth_pred1 <- predict(fit1, tempData)
+        ggplot(tempData, aes(x=Distance_from_Equator,
+                             y=Depth,
+                             color = Region,
+                             group = Region))+
+          geom_point()+
+          theme_bw()+
+          geom_line(aes(y = Depth_pred1))+
+          labs(title= "Depth and Distance from Equator with interaction",
+               x= "Distance_from_Equator",
+               y= "Depth (m)",
+               color="Region"
+          ) +
+          # stat_summary(fun = "mean", geom = "point") +
+          # stat_summary(fun = "mean", geom = "line")+
+          theme(legend.position = "bottom",
+                text=element_text(size=15))+
+          geom_vline(xintercept =as.numeric(input$x3),color="red")
         
       }
     )
-    
-    
-    
-    # output$graphDisplay11 <- renderPlot(
-    #   
-    #   expr = {
-    #     validate(
-    #       need(
-    #         expr = !is.null(r$tempData),
-    #         message = "Click on Generate New Sample to create a plot without interaction"
-    #       )
-    #     )
-    #     
-    #     tempData=r$tempData
-    #     if(input$x11==0){
-    #       ggplot(
-    #         data = tempData,
-    #         mapping = aes(
-    #           x = Distance_from_Equator,
-    #           y = Depth,
-    #           group = 1,
-    #         )
-    #       )+
-    #         geom_point(size=2.5) +
-    #         labs(title= "Depth and Distance from Equator without interaction",
-    #              x= "Distance from Equator",
-    #              y= "Depth (m)",
-    #              color="Region"
-    #         ) +
-    #         stat_summary(fun = "mean", geom = "point") +
-    #         stat_summary(fun = "mean", geom = "line")+
-    #         theme(
-    #           legend.position = "bottom",
-    #           text=element_text(size=15))+
-    #         geom_vline(xintercept =1,
-    #                    color="red" )
-    #     }else{
-    #       ggplot(
-    #         data = tempData,
-    #         mapping = aes(
-    #           x = Distance_from_Equator,
-    #           y = Depth,
-    #           group = 1
-    #         )
-    #       )+
-    #         geom_point(size=2.5) +
-    #         labs(title= "Depth and Distance from Equator without interaction",
-    #              x= "Distance from Equator",
-    #              y= "Depth (m)",
-    #              color="Region"
-    #         ) +
-    #         stat_summary(fun = "mean", geom = "point") +
-    #         stat_summary(fun = "mean", geom = "line")+
-    #         theme(
-    #           legend.position = "bottom",
-    #           text=element_text(size=15))+
-    #         geom_vline(xintercept =2,
-    #                    color="red")
-    #     }
-    #     
-    #     
-    #   }
-    # )
-    # 
-    # 
-    # 
     
     
     
@@ -920,7 +843,7 @@ server <- function(input, output, session) {
     observeEvent(
       eventExpr = input$newSample2,
       handlerExpr = {
-        r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 50),]
+        r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 28),]
         
         
       },
@@ -935,12 +858,14 @@ server <- function(input, output, session) {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot"
+            message = "Click on Generate New Sample to create a plot with interaction"
           )
         )
         
         tempData=r$tempData
-        
+        test21<- lm(Depth ~ Diameter + Distance_from_Equator+ 
+                      Diameter:Distance_from_Equator, data = tempData)
+        test22<- makePredictionData(test21)
         
         ggplot(
           data = tempData,
@@ -951,6 +876,20 @@ server <- function(input, output, session) {
             group = Distance_from_Equator
           )
         )+
+          geom_jitter()+
+          theme_bw()+
+          geom_smooth(
+            inherit.aes = FALSE,
+            data = test22,
+            mapping = aes(
+              x = Diameter,
+              y = Depth,
+              color = Distance_from_Equator,
+              group = Distance_from_Equator
+            ),
+            formula = "y~x",
+            method = "lm"
+          )+
           geom_point(size=2.5) +
           labs(title= "Depth and Distance from Equator with interaction",
                x= "Diameter",
@@ -960,6 +899,25 @@ server <- function(input, output, session) {
           geom_point() + geom_smooth(method = "lm", fill = NA)+
           theme(legend.position = "bottom",
                 text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x3),color="red")
+        
+        # ggplot(
+        #   data = tempData,
+        #   mapping = aes(
+        #     x = Diameter,
+        #     y = Depth,
+        #     color = Distance_from_Equator,
+        #     group = Distance_from_Equator
+        #   )
+        # )+
+        #   geom_point(size=2.5) +
+        #   labs(title= "Depth and Distance from Equator with interaction",
+        #        x= "Diameter",
+        #        y= "Depth (m)",
+        #        color="Distance from Equator"
+        #   ) +
+        #   geom_point() + geom_smooth(method = "lm", fill = NA)+
+        #   theme(legend.position = "bottom",
+        #         text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x3),color="red")
       }
     )
     
@@ -969,32 +927,37 @@ server <- function(input, output, session) {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot"
+            message = "Click on Generate New Sample to create a plot without interaction"
           )
         )
         
+        
         tempData=r$tempData
         
-        
-        ggplot(
-          data = tempData,
-          mapping = aes(
-            x = Diameter,
-            y = Depth,
-            group = 1
-          )
-        )+
-          geom_point(size=2.5) +
-          labs(title= "Depth and Distance from Equator without interaction",
-               x= "Diameter",
-               y= "Depth (m)",
+        fit<- lm(Depth ~ Diameter + Distance_from_Equator,
+                 data = tempData)
+        Depth_pred <- predict(fit, tempData)
+        ggplot(tempData,
+               aes(
+                 x=Diameter,
+                 y=Depth,
+                 color = Distance_from_Equator))+
+          geom_point(size=2.5)+
+          labs(title= "Depth and Diameter",
+               x= "Diameter(m)",
+               y= "Depth(m)",
                color="Distance from Equator"
           ) +
-          geom_point() + geom_smooth(method = "lm", fill = NA)+
+          geom_line(aes(y = Depth_pred))+
+          theme_bw()+
           theme(legend.position = "bottom",
                 text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x3),color="red")
+        
       }
     )
+    
+    
+    
     
     
     
@@ -1002,7 +965,7 @@ server <- function(input, output, session) {
     observeEvent(
       eventExpr = input$newSample3,
       handlerExpr = {
-        r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 50),]
+        r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 16),]
         
         
       },
@@ -1011,7 +974,6 @@ server <- function(input, output, session) {
     )
     
     output$graphDisplay3 <- renderPlot(
-      
       expr = {
         validate(
           need(
@@ -1022,10 +984,9 @@ server <- function(input, output, session) {
         
         tempData=r$tempData
         
-        
-        test3 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian, 
-                    data = tempData)
-        test4<- makePredictionData(test3)
+        test31 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian, 
+                     data = tempData)
+        test41<- makePredictionData(test31)
         
         ggplot(
           data = tempData,
@@ -1037,10 +998,11 @@ server <- function(input, output, session) {
           )
         )+
           geom_jitter()+
+          scale_color_gradient(low = "56B1F7", high = "132B43") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
-            data = test4,
+            data = test41,
             mapping = aes(
               x = Diameter,
               y = Depth,
@@ -1057,7 +1019,9 @@ server <- function(input, output, session) {
                color="Absolute Distance from Meridian"
           ) +
           theme(legend.position = "bottom",
-                text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x33),color="red")
+                text=element_text(size=15))+
+          geom_vline(xintercept =as.numeric(input$x33), 
+                     color="red")
         
       }
     )
@@ -1076,27 +1040,30 @@ server <- function(input, output, session) {
         tempData=r$tempData
         
         
-        test3 <- lm(Depth ~ Diameter+Absolute_Distance_from_Meridian, 
-                    data = tempData)
-        test4<- makePredictionData(test3)
+        test32 <- lm(Depth ~ Diameter + Absolute_Distance_from_Meridian, 
+                     data = tempData)
+        test42<- makePredictionData(test32)
         
         ggplot(
           data = tempData,
           mapping = aes(
             x = Diameter,
             y = Depth,
-            group = 1
+            color = Absolute_Distance_from_Meridian,
+            group = Absolute_Distance_from_Meridian
           )
         )+
           geom_jitter()+
+          scale_color_gradient(low = "56B1F7", high = "132B43") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
-            data = test4,
+            data = test42,
             mapping = aes(
               x = Diameter,
               y = Depth,
-              group = 1
+              color = Absolute_Distance_from_Meridian,
+              group = Absolute_Distance_from_Meridian
             ),
             formula = "y~x",
             method = "lm"
@@ -1114,249 +1081,250 @@ server <- function(input, output, session) {
     )
     
     
-    
-    observeEvent(
-      eventExpr = input$newSample,
-      handlerExpr = {
-        output$exploreSummary1 <- DT::renderDataTable({
-          exampleModel <- lm(
-            formula = Depth ~ Distance_from_Equator * Region,
-            data = r$tempData)
-          exampleCoeff1<- round(summary(exampleModel)$coefficients, digits = 4)
-          
-          row.names(exampleCoeff1) <- sapply(
-            X = row.names(exampleCoeff1),
-            FUN = function(x) {
-              gsub(
-                pattern = "[[:punct:]]",
-                replacement = " ",
-                x = x
-              )
-            }
-          )
-          
-          datatable(
-            exampleCoeff1,
-            caption = "Model Coefficients with interaction",
-            style = "bootstrap4",
-            rownames = TRUE,
-            options = list(
-              responsive = TRUE,
-              scrollX = TRUE,
-              ordering = FALSE,
-              paging = FALSE,
-              lengthChange = FALSE,
-              pageLength = 10,
-              searching = FALSE,
-              info = FALSE,
-              columnDefs = list(
-                list(className = "dt-center", targets = 1:ncol(exampleCoeff1))
-              )
-            )
-          )
-        })
-        
-        
-        output$exploreSummary11 <- DT::renderDataTable({
-          exampleModel <- lm(
-            formula = Depth ~ Distance_from_Equator + Region,
-            data = r$tempData)
-          exampleCoeff1<- round(summary(exampleModel)$coefficients, digits = 4)
-          
-          row.names(exampleCoeff1) <- sapply(
-            X = row.names(exampleCoeff1),
-            FUN = function(x) {
-              gsub(
-                pattern = "[[:punct:]]",
-                replacement = " ",
-                x = x
-              )
-            }
-          )
-          
-          datatable(
-            exampleCoeff1,
-            caption = "Model Coefficients without interaction",
-            style = "bootstrap4",
-            rownames = TRUE,
-            options = list(
-              responsive = TRUE,
-              scrollX = TRUE,
-              ordering = FALSE,
-              paging = FALSE,
-              lengthChange = FALSE,
-              pageLength = 10,
-              searching = FALSE,
-              info = FALSE,
-              columnDefs = list(
-                list(className = "dt-center", targets = 1:ncol(exampleCoeff1))
-              )
-            )
-          )
-        })
-        
-        
-        
-        
-        output$exploreSummary2 <- DT::renderDataTable({
-          
-          exampleModel <- lm(
-            formula = Depth ~ Diameter * Distance_from_Equator,
-            data = r$tempData)
-          exampleCoeff2<- round(summary(exampleModel)$coefficients, digits = 4)
-          
-          row.names(exampleCoeff2) <- sapply(
-            X = row.names(exampleCoeff2),
-            FUN = function(x) {
-              gsub(
-                pattern = "[[:punct:]]",
-                replacement = " ",
-                x = x
-              )
-            }
-          )
-          
-          datatable(
-            exampleCoeff2,
-            caption = "Model Coefficients with interaction",
-            style = "bootstrap4",
-            rownames = TRUE,
-            options = list(
-              responsive = FALSE,
-              scrollX = TRUE,
-              ordering = FALSE,
-              paging = FALSE,
-              lengthChange = FALSE,
-              pageLength = 10,
-              searching = FALSE,
-              info = FALSE,
-              columnDefs = list(
-                list(className = "dt-center", targets = 1:ncol(exampleCoeff2))
-              )
-            )
-          )
-        })
-        
-        output$exploreSummary22 <- DT::renderDataTable({
-          
-          exampleModel <- lm(
-            formula = Depth ~ Diameter + Distance_from_Equator,
-            data = r$tempData)
-          exampleCoeff2<- round(summary(exampleModel)$coefficients, digits = 4)
-          
-          row.names(exampleCoeff2) <- sapply(
-            X = row.names(exampleCoeff2),
-            FUN = function(x) {
-              gsub(
-                pattern = "[[:punct:]]",
-                replacement = " ",
-                x = x
-              )
-            }
-          )
-          
-          datatable(
-            exampleCoeff2,
-            caption = "Model Coefficients without interaction",
-            style = "bootstrap4",
-            rownames = TRUE,
-            options = list(
-              responsive = TRUE,
-              scrollX = TRUE,
-              ordering = FALSE,
-              paging = FALSE,
-              lengthChange = FALSE,
-              pageLength = 10,
-              searching = FALSE,
-              info = FALSE,
-              columnDefs = list(
-                list(className = "dt-center", targets = 1:ncol(exampleCoeff2))
-              )
-            )
-          )
-        })
-        
-        
-        output$exploreSummary3 <- DT::renderDataTable({
-          exampleModel <- lm(
-            formula = Depth ~ Diameter * Absolute_Distance_from_Meridian,
-            data = r$tempData)
-          
-          exampleCoeff3<- round(summary(exampleModel)$coefficients, digits = 4)
-          
-          row.names(exampleCoeff3) <- sapply(
-            X = row.names(exampleCoeff3),
-            FUN = function(x) {
-              gsub(
-                pattern = "[[:punct:]]",
-                replacement = " ",
-                x = x
-              )
-            }
-          )
-          datatable(
-            exampleCoeff3,
-            caption = "Model Coefficients with interaction",
-            style = "bootstrap4",
-            rownames = TRUE,
-            options = list(
-              responsive = TRUE,
-              scrollX = TRUE,
-              ordering = FALSE,
-              paging = FALSE,
-              lengthChange = FALSE,
-              pageLength = 10,
-              searching = FALSE,
-              info = FALSE,
-              columnDefs = list(
-                list(className = "dt-center", targets = 1:ncol(exampleCoeff3))
-              )
-            )
-          )
-        })
-        
-        
-        output$exploreSummary33 <- DT::renderDataTable({
-          exampleModel <- lm(
-            formula = Depth ~ Diameter + Absolute_Distance_from_Meridian,
-            data = r$tempData)
-          
-          exampleCoeff3<- round(summary(exampleModel)$coefficients, digits = 4)
-          
-          row.names(exampleCoeff3) <- sapply(
-            X = row.names(exampleCoeff3),
-            FUN = function(x) {
-              gsub(
-                pattern = "[[:punct:]]",
-                replacement = " ",
-                x = x
-              )
-            }
-          )
-          datatable(
-            exampleCoeff3,
-            caption = "Model Coefficients without interaction",
-            style = "bootstrap4",
-            rownames = TRUE,
-            options = list(
-              responsive = TRUE,
-              scrollX = TRUE,
-              ordering = FALSE,
-              paging = FALSE,
-              lengthChange = FALSE,
-              pageLength = 10,
-              searching = FALSE,
-              info = FALSE,
-              columnDefs = list(
-                list(className = "dt-center", targets = 1:ncol(exampleCoeff3))
-              )
-            )
-          )
-        })
-      },
-      ignoreNULL = TRUE,
-      ignoreInit = TRUE
-    )
+    ## output table
+    # observeEvent(
+    #   eventExpr = input$newSample,
+    #   handlerExpr = {
+    #     output$exploreSummary1 <- DT::renderDataTable({
+    #       exampleModel <- lm(
+    #         formula = Depth ~ Distance_from_Equator * Region,
+    #         data = r$tempData)
+    #       exampleCoeff1<- round(summary(exampleModel)$coefficients, digits = 4)
+    #       
+    #       row.names(exampleCoeff1) <- sapply(
+    #         X = row.names(exampleCoeff1),
+    #         FUN = function(x) {
+    #           gsub(
+    #             pattern = "[[:punct:]]",
+    #             replacement = " ",
+    #             x = x
+    #           )
+    #         }
+    #       )
+    #       
+    #       datatable(
+    #         exampleCoeff1,
+    #         caption = "Model Coefficients with interaction",
+    #         style = "bootstrap4",
+    #         rownames = TRUE,
+    #         options = list(
+    #           responsive = TRUE,
+    #           scrollX = TRUE,
+    #           ordering = FALSE,
+    #           paging = FALSE,
+    #           lengthChange = FALSE,
+    #           pageLength = 10,
+    #           searching = FALSE,
+    #           info = FALSE,
+    #           columnDefs = list(
+    #             list(className = "dt-center", targets = 1:ncol(exampleCoeff1))
+    #           )
+    #         )
+    #       )
+    #     })
+    #     
+    #     
+    #     output$exploreSummary11 <- DT::renderDataTable({
+    #       exampleModel <- lm(
+    #         formula = Depth ~ Distance_from_Equator * Region,
+    #         data =  r$tempData)
+    #       exampleCoeff1<- round(summary(exampleModel)$coefficients, digits = 4)
+    #       
+    #       row.names(exampleCoeff1) <- sapply(
+    #         X = row.names(exampleCoeff1),
+    #         FUN = function(x) {
+    #           gsub(
+    #             pattern = "[[:punct:]]",
+    #             replacement = " ",
+    #             x = x
+    #           )
+    #         }
+    #       )
+    #       
+    #       datatable(
+    #         exampleCoeff1,
+    #         caption = "Model Coefficients without interaction",
+    #         style = "bootstrap4",
+    #         rownames = TRUE,
+    #         options = list(
+    #           responsive = TRUE,
+    #           scrollX = TRUE,
+    #           ordering = FALSE,
+    #           paging = FALSE,
+    #           lengthChange = FALSE,
+    #           pageLength = 10,
+    #           searching = FALSE,
+    #           info = FALSE,
+    #           columnDefs = list(
+    #             list(className = "dt-center", targets = 1:ncol(exampleCoeff1))
+    #           )
+    #         )
+    #       )
+    #     })
+    #     
+    #     
+    #     
+    #     
+    #     output$exploreSummary2 <- DT::renderDataTable({
+    #       
+    #       exampleModel <- lm(
+    #         formula = Depth ~ Diameter + Distance_from_Equator,
+    #         data = r$tempData)
+    #       exampleCoeff2<- round(summary(exampleModel)$coefficients, digits = 4)
+    #       
+    #       row.names(exampleCoeff2) <- sapply(
+    #         X = row.names(exampleCoeff2),
+    #         FUN = function(x) {
+    #           gsub(
+    #             pattern = "[[:punct:]]",
+    #             replacement = " ",
+    #             x = x
+    #           )
+    #         }
+    #       )
+    #       
+    #       datatable(
+    #         exampleCoeff2,
+    #         caption = "Model Coefficients with interaction",
+    #         style = "bootstrap4",
+    #         rownames = TRUE,
+    #         options = list(
+    #           responsive = FALSE,
+    #           scrollX = TRUE,
+    #           ordering = FALSE,
+    #           paging = FALSE,
+    #           lengthChange = FALSE,
+    #           pageLength = 10,
+    #           searching = FALSE,
+    #           info = FALSE,
+    #           columnDefs = list(
+    #             list(className = "dt-center", targets = 1:ncol(exampleCoeff2))
+    #           )
+    #         )
+    #       )
+    #     })
+    #     
+    #     output$exploreSummary22 <- DT::renderDataTable({
+    #       
+    #       exampleModel <- lm(
+    #         formula = Depth ~ Diameter + Distance_from_Equator,
+    #         data = r$tempData)
+    #       exampleCoeff2<- round(summary(exampleModel)$coefficients, digits = 4)
+    #       
+    #       row.names(exampleCoeff2) <- sapply(
+    #         X = row.names(exampleCoeff2),
+    #         FUN = function(x) {
+    #           gsub(
+    #             pattern = "[[:punct:]]",
+    #             replacement = " ",
+    #             x = x
+    #           )
+    #         }
+    #       )
+    #       
+    #       datatable(
+    #         exampleCoeff2,
+    #         caption = "Model Coefficients without interaction",
+    #         style = "bootstrap4",
+    #         rownames = TRUE,
+    #         options = list(
+    #           responsive = TRUE,
+    #           scrollX = TRUE,
+    #           ordering = FALSE,
+    #           paging = FALSE,
+    #           lengthChange = FALSE,
+    #           pageLength = 10,
+    #           searching = FALSE,
+    #           info = FALSE,
+    #           columnDefs = list(
+    #             list(className = "dt-center", targets = 1:ncol(exampleCoeff2))
+    #           )
+    #         )
+    #       )
+    #     })
+    #     
+    #     
+    #     output$exploreSummary3 <- DT::renderDataTable({
+    #       exampleModel <- lm(
+    #         formula = Depth ~ Diameter * Absolute_Distance_from_Meridian,
+    #         data = tempData)
+    #       
+    #       exampleCoeff3<- round(summary(exampleModel)$coefficients, digits = 4)
+    #       
+    #       row.names(exampleCoeff3) <- sapply(
+    #         X = row.names(exampleCoeff3),
+    #         FUN = function(x) {
+    #           gsub(
+    #             pattern = "[[:punct:]]",
+    #             replacement = " ",
+    #             x = x
+    #           )
+    #         }
+    #       )
+    #       datatable(
+    #         exampleCoeff3,
+    #         caption = "Model Coefficients with interaction",
+    #         style = "bootstrap4",
+    #         rownames = TRUE,
+    #         options = list(
+    #           responsive = TRUE,
+    #           scrollX = TRUE,
+    #           ordering = FALSE,
+    #           paging = FALSE,
+    #           lengthChange = FALSE,
+    #           pageLength = 10,
+    #           searching = FALSE,
+    #           info = FALSE,
+    #           columnDefs = list(
+    #             list(className = "dt-center", targets = 1:ncol(exampleCoeff3))
+    #           )
+    #         )
+    #       )
+    #     })
+    #     
+    #     
+    #     output$exploreSummary33 <- DT::renderDataTable({
+    #       exampleModel <- lm(
+    #         formula = Depth ~ Diameter + Absolute_Distance_from_Meridian,
+    #         data = tempData)
+    #       
+    #       exampleCoeff3<- round(summary(exampleModel)$coefficients, digits = 4)
+    #       
+    #       row.names(exampleCoeff3) <- sapply(
+    #         X = row.names(exampleCoeff3),
+    #         FUN = function(x) {
+    #           gsub(
+    #             pattern = "[[:punct:]]",
+    #             replacement = " ",
+    #             x = x
+    #           )
+    #         }
+    #       )
+    #       
+    #       datatable(
+    #         exampleCoeff3,
+    #         caption = "Model Coefficients without interaction",
+    #         style = "bootstrap4",
+    #         rownames = TRUE,
+    #         options = list(
+    #           responsive = TRUE,
+    #           scrollX = TRUE,
+    #           ordering = FALSE,
+    #           paging = FALSE,
+    #           lengthChange = FALSE,
+    #           pageLength = 10,
+    #           searching = FALSE,
+    #           info = FALSE,
+    #           columnDefs = list(
+    #             list(className = "dt-center", targets = 1:ncol(exampleCoeff3))
+    #           )
+    #         )
+    #       )
+    #     })
+    #   },
+    #   ignoreNULL = TRUE,
+    #   ignoreInit = TRUE
+    # )
     
     
   })
