@@ -63,11 +63,11 @@ ui <- list(
           h1("Multiplicative Interaction"), # This should be the full name.
           br(),
           p("In this app, you will learn three types of interaction term regression models:"),
-          p("1. Interactions between binary regressors"),
-          p("2. Interaction between binary variable and a continuous variable"),
+          p("1. Interactions between binary regressors;"),
+          p("2. Interaction between binary variable and a continuous variable;"),
           p("3. Interaction between continuous regressors."),
           br(),
-          h2("Instructions"),
+          h3("Instructions"),
           p("1. Review any prerequiste ideas using the Prerequistes tab."),
           p("2. Examine the lunar crater example to see the illustration of 
             the ideas."),
@@ -97,7 +97,7 @@ ui <- list(
              citeApp(),
              br(),
              br(),
-             div(class = "updated", "Last Update: 11/26/2022 by XYT.")
+             div(class = "updated", "Last Update: 11/29/2022 by XYT.")
           )
         ),
         #### Set up the Prerequisites Page ----
@@ -108,22 +108,43 @@ ui <- list(
           p("In order to get the most out of this app, please review the
             following:"),
           tags$ul(
-            tags$li("A linear regression model with multiplicative interaction for a response,",tags$em("Y")," with explanatory variables \\(X_1\\) and \\(X_2\\) takes the form:"),
-            p("\\[E(Y) = \\beta_0 + \\beta_1 X_1 + \\beta_2 X_2 + \\beta_3(X_1 X_2)\\]"),
-            p("So that the intercept \\(\\beta_0\\)  is the expected response when both \\(X_1\\) and \\(X_2\\) are zero;"),
-            p("\\(\\beta_1\\) is the increase in the average value of ",tags$em("Y")," per unit of \\(X_1\\) when \\(\\beta_3\\) and/or \\(X_2\\) is zero, (if you hold \\(X_2\\) fixed at some non-zero level \\(X_2\\) then the average value of ",tags$em("Y")," changes by \\(\\beta_1\\) + \\(\\beta_3\\ (X_2\\) per unit of \\(X_1\\));"),
-            p("\\(\\beta_2\\) is the increase in the average value of ",tags$em("Y")," per unit of \\(X_2\\) when \\(\\beta_3\\) and/or \\(X_1\\) is zero, (if you hold \\(X_1\\) fixed at some non-zero level \\(X_1\\) then the average value of ",tags$em("Y")," changes by \\(\\beta_2\\) + \\(\\beta_3\\ (X_1\\) per unit of \\(X_2\\))."),
-            p("Interpretation: When there is an interaction in the model, the degree to which a change in one
-of the X variables affects the expectation of ",tags$em("Y")," depends on the other X variable. The coefficient
-\\(\\beta_3\\) tells you how strong that dependency is."),
-tags$li("Special case: Suppose \\(X_2\\) is a binary variable that =1 if an event “A??? happens and = 0 if it doesn’t.
-            \\(E(Y) = (\\beta_0 + \\beta_2)+ (\\beta_1 + \\beta_3) X_1\\) when A happens and
-            \\(E(Y) = \\beta_0 + \\beta_1 X_1\\) when it doesn't"),
+            tags$li("A linear regression model with multiplicative interaction 
+                    for a response,",tags$em("Y")," with explanatory variables 
+                    \\(X_1\\) and \\(X_2\\) takes the form:"),
+            p("\\[E(Y) = \\beta_0 + \\beta_1 X_1 + \\beta_2 X_2 + 
+              \\beta_3(X_1 X_2)\\]"),
+            p("So that the intercept \\(\\beta_0\\)  is the expected response 
+              when both \\(X_1\\) and \\(X_2\\) are zero;"),
+            p("\\(\\beta_1\\) is the increase in the average value of ",
+              tags$em("Y")," per unit of \\(X_1\\) when \\(\\beta_3\\) and/or 
+              \\(X_2\\) is zero, (if you hold \\(X_2\\) fixed at some non-zero 
+              level \\(X_2\\) then the average value of ",tags$em("Y")," 
+              changes by \\(\\beta_1\\) + \\(\\beta_3\\ (X_2\\) per unit 
+              of \\(X_1\\));"),
+            p("\\(\\beta_2\\) is the increase in the average value of ",
+              tags$em("Y")," per unit of \\(X_2\\) when \\(\\beta_3\\) 
+              and/or \\(X_1\\) is zero, (if you hold \\(X_1\\) fixed at 
+              some non-zero level \\(X_1\\) then the average value of ",
+              tags$em("Y")," changes by \\(\\beta_2\\) + \\(\\beta_3\\ 
+              (X_1\\) per unit of \\(X_2\\))."),
+            p("Interpretation: When there is an interaction in the model, 
+              the degree to which a change in one of the X variables affects 
+              the expectation of ",tags$em("Y")," depends on the other X 
+              variable. The coefficient \\(\\beta_3\\) tells you how strong 
+              that dependency is."),
+tags$li("Special case: Suppose \\(X_2\\) is a binary variable that =1 if an 
+        event “A” happens and = 0 if it doesn’t. \\(E(Y) = (\\beta_0 + 
+        \\beta_2)+ (\\beta_1 + \\beta_3) X_1\\) 
+        when A happens and\\(E(Y) = \\beta_0 + \\beta_1 X_1\\) 
+        when it doesn't"),
           ),
 tags$ul(
-  tags$li("Special case of the special case: Suppose both \\(X_1\\) and \\(X_2\\) are binary variables and \\(X_1\\)=1 if an event “B??? happens and = 0 if it doesn’t."),
+  tags$li("Special case of the special case: Suppose both \\(X_1\\) and 
+          \\(X_2\\) are binary variables and \\(X_1\\)=1 if an event “B” 
+          happens and = 0 if it doesn’t."),
   p("In this case"),
-  p("\\(E(Y) = (\\beta_0 + \\beta_1  + \\beta_2  + \\beta_3)\\) when A and B both happen"),
+  p("\\(E(Y) = (\\beta_0 + \\beta_1  + \\beta_2  + \\beta_3)\\) when 
+    A and B both happen"),
   p("\\(E(Y) = (\\beta_0 + \\beta_1 )\\) when B happens but A doesn't"),
   p("\\(E(Y) = (\\beta_0 + \\beta_2 )\\) when A happens but B doesn't"),
   p("\\(E(Y) = \\beta_0\\) when neither A nor B happen"),
@@ -136,7 +157,8 @@ box(
   collapsible = TRUE,
   collapsed = TRUE,
   width = '100%',
-  "The average value of Y is related to by one linear equation when A happens and by a different line when it doesn’t."
+  "The average value of Y is related to by one linear equation when A happens 
+  and by a different line when it doesn’t."
 ),
 box(
   title = strong("Interpretation on special case of the special case when both
@@ -145,7 +167,8 @@ box(
   collapsible = TRUE,
   collapsed = TRUE,
   width = '100%',
-  "The average value of ",tags$em("Y")," changes by a constant amount that depends on whether the events A and B happen or not."
+  "The average value of ",tags$em("Y")," changes by a constant amount that 
+  depends on whether the events A and B happen or not."
 ),
         ),
 
@@ -161,7 +184,7 @@ tabItem(
     from the equator; whether the crater is in a Highland area or in a Mare; 
     Diameter of the crater and the distance from lunar meridian."),
   br(),
-  p("Instruction:"),
+  h3("Instruction:"),
   p("Select the type of interaction you want to explore, then view the 
     corresponding summary table of coefficients. and try to identify 
     if there is interaction for predicting depth.
@@ -223,7 +246,8 @@ tabItem(
     response variable Y, predicted by binary variable Distance from Equator 
     and Region Type and continuous variable Diameter and Absolute 
     Distance from Meridian."),
-  p("Instruction:"),
+  br(),
+  h3("Instruction:"),
   p("In the explore page, you could use the Generate New Sample button to see
     the plot that generated by different random sample, one plot is the one with
     interaction term and the other plot is without interaction term. In addition,
@@ -393,12 +417,6 @@ tabItem(
   tabName = "references",
   withMathJax(),
   h2("References"),
-  
-  p(
-    class = "hangingindent", 
-    "Allaire JJ, Xie Y., rmarkdown: Convert R Markdown documents into a variety
-            of formats."
-  ),
   p(
     class = "hangingindent",
     "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
@@ -406,50 +424,55 @@ tabItem(
             https://CRAN.R-project.org/package=shinyBS"
   ),
   p(
-    class = "hangingindent", 
-    "Carey, R. (2019), boastUtils: BOAST Utilities, R Package.
-    https://github.com/EducationShinyAppTeam/boastUtils"
-  ), 
-  p(
-    class = "hangingindent", 
-    "Chang W and Borges Ribeiro B (2017). shinydashboard: Create
-            Dashboards with 'Shiny'. R package version 0.6.1"
+    class = "hangingindent",
+    "Carey, R. and Hatfield, N. (2022). boastUtils: BOAST utlities.
+            (v 0.1.12.3). [R package]. Available from
+            https://github.com/EducationShinyAppTeam/boastUtils"
   ),
   p(
-    class = "hangingindent", 
-    "Chang W, Cheng J, Allaire J, Xie Y and McPherson J (2017). shiny:
-            Web Application Framework for R. R package version 1.0.3"
-  ), 
+    class = "hangingindent",
+    "Chang, W., and Borges Ribeiro, B. (2021). shinydashboard: Create 
+            dashboards with 'shiny'. (v 0.7.2) [R package]. Available from
+            https://CRAN.R-project.org/package=shinydashboard"
+  ),
   p(
     class = "hangingindent",
-    "Sun, Shujuan, et al. “Investigation of the Depth and Diameter Relationship 
+    "Chang, W., Cheng J., Allaire, J., Sievert, C., Schloerke, B., Xie, Y.,
+            Allen, J., McPherson, J., Dipert, A., and Borges, B. (2021). shiny:
+            Web application framework for R. (v 1.7.1). [R package]. Available
+            from https://CRAN.R-project.org/package=shiny"
+  ),
+  p(
+    class = "hangingindent",
+    "Sun, S., et al. “Investigation of the Depth and Diameter Relationship 
    of Subkilometer-Diameter Lunar Craters.??? Icarus, vol. 309, 15 July 2018, 
    pp. 61???68., https://doi.org/10.1016/j.icarus.2018.02.031. "
   ),
   p(
     class = "hangingindent", 
-    "Victor Perrier, Fanny Meyer and David Granjon (2018). 
+    "Victor, P., Fanny, M. and David, G. (2018). 
             shinyWidgets: Custom Inputs Widgets for Shiny.
             R package version 0.4.3."
   ),
   p(
-    class = "hangingindent", 
-    "Wickham H (2016). ggplot2: Elegant Graphics for Data Analysis. 
-            Springer-Verlag New York. ISBN 978-3-319-24277-4"
+    class = "hangingindent",
+    "Wickham, H. (2016). ggplot2: Elegant graphics for data analysis.
+            Springer-Verlag:New York. (v 3.3.6) [R package]. Available from
+            https://ggplot2.tidyverse.org"
   ),
   p(
     class = "hangingindent",
-    "Wickham H, Bryan J (2022). readxl: Read Excel Files. 
+    "Wickham, H., Bryan, J. (2022). readxl: Read Excel Files. 
     https://readxl.tidyverse.org, https://github.com/tidyverse/readxl."
   ),
   p(
     class = "hangingindent", 
-    "Xie Y., Sarma A., Vogt A., knitr: Provides a general=purpose tool for
+    "Xie, Y., Sarma, A., Vogt, A., knitr: Provides a general=purpose tool for
             dynamic report generation in R using Literate Programming techniques."
   ),
   p(
     class = "hangingindent",
-    "Yihui Xie, Joe Cheng and Xianying Tan (2022). DT: A Wrapper of the 
+    "Yihui, X., Joe, C. and Xianying, T. (2022). DT: A Wrapper of the 
             JavaScript Library 'DataTables'. R package version 0.21.
             https://CRAN.R-project.org/package=DT"
   ),
@@ -476,7 +499,8 @@ server <- function(input, output, session) {
         session = session,
         type = "info",
         title = "Information",
-        text = "This App Template will help you get started building your own app"
+        text = "This App will help you get familiar with multiplicative interaction by showing
+        plot of with interaction and without interaction. "
       )
     }
   )
@@ -542,7 +566,7 @@ server <- function(input, output, session) {
             labs(title= "Depth and Distance from Equator",
                  x= "Distance from Equator",
                  y= "Depth(m)",
-                 color="Region"
+                 color="Region Type"
             ) +
             stat_summary(fun = "mean", geom = "point") +
             stat_summary(fun = "mean", geom = "line")+
@@ -599,7 +623,7 @@ server <- function(input, output, session) {
           )
         )+
           geom_jitter()+
-          scale_color_gradient(low = "56B1F7", high = "132B43") +
+          scale_color_gradient(low = "lightblue", high = "blue") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
@@ -798,7 +822,8 @@ server <- function(input, output, session) {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot WITHOUT interaction"
+            message = "Click on Generate New Sample to create a plot 
+            WITHOUT interaction"
           )
         )
         
@@ -853,7 +878,8 @@ server <- function(input, output, session) {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot WITH interaction"
+            message = "Click on Generate New Sample to create a plot
+            WITH interaction"
           )
         )
         
@@ -893,7 +919,8 @@ server <- function(input, output, session) {
           ) +
           geom_point() + geom_smooth(method = "lm", fill = NA)+
           theme(legend.position = "bottom",
-                text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x3),color="red")
+                text=element_text(size=15))+
+          geom_vline(xintercept =as.numeric(input$x3),color="red")
         
         # ggplot(
         #   data = tempData,
@@ -922,7 +949,8 @@ server <- function(input, output, session) {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot WITHOUT interaction"
+            message = "Click on Generate New Sample to create a plot 
+            WITHOUT interaction"
           )
         )
         
@@ -946,7 +974,8 @@ server <- function(input, output, session) {
           geom_line(aes(y = Depth_pred))+
           theme_bw()+
           theme(legend.position = "bottom",
-                text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x3),color="red")
+                text=element_text(size=15))+
+          geom_vline(xintercept =as.numeric(input$x3),color="red")
         
       }
     )
@@ -973,7 +1002,8 @@ server <- function(input, output, session) {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot WITH interaction"
+            message = "Click on Generate New Sample to create a plot 
+            WITH interaction"
           )
         )
         
@@ -993,7 +1023,7 @@ server <- function(input, output, session) {
           )
         )+
           geom_jitter()+
-          scale_color_gradient(low = "56B1F7", high = "132B43") +
+          scale_color_gradient(low = "lightblue", high = "blue") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
@@ -1028,7 +1058,8 @@ server <- function(input, output, session) {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot WITHOUT interaction"
+            message = "Click on Generate New Sample to create a plot 
+            WITHOUT interaction"
           )
         )
         
@@ -1049,7 +1080,7 @@ server <- function(input, output, session) {
           )
         )+
           geom_jitter()+
-          scale_color_gradient(low = "56B1F7", high = "132B43") +
+          scale_color_gradient(low = "lightblue", high = "blue") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
@@ -1070,7 +1101,8 @@ server <- function(input, output, session) {
                color="Absolute Distance from Meridian"
           ) +
           theme(legend.position = "bottom",
-                text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x33),color="red")
+                text=element_text(size=15))+
+          geom_vline(xintercept =as.numeric(input$x33),color="red")
         
       }
     )
@@ -1090,7 +1122,8 @@ server <- function(input, output, session) {
           
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
-          colnames(pred)<-c("predict with interaction","predict without interaction")
+          colnames(pred)<-c("predict with interaction",
+                            "predict without interaction")
           
           datatable(
             pred,
