@@ -6,7 +6,6 @@ library(shinyWidgets)
 library(boastUtils)
 library(ggplot2)
 library(readxl)
-library(tidyverse)
 library(DT)
 
 ## Load in data
@@ -40,7 +39,7 @@ ui <- list(
       width = 250,
       sidebarMenu(
         id = "pages",
-        menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
+        menuItem("Overview", tabName = "overview", icon = icon("gauge-high")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
         menuItem("Example", tabName = "example", icon = icon("book-open-reader")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
@@ -48,8 +47,6 @@ ui <- list(
       ),
       tags$div(
         class = "sidebar-logo",
-        # boastUtils::sidebarFooter()
-        # boastUtils::psu_eberly_logo("reversed")
         boastUtils::sidebarFooter()
       )
     ),
@@ -69,11 +66,11 @@ ui <- list(
           br(),
           h3("Instructions"),
           p("1. Review any prerequiste ideas using the Prerequistes tab."),
-          p("2. Examine the lunar crater example to see the illustration of 
+          p("2. Examine the lunar crater example to see the illustration of
             the ideas."),
           p("3. Explore the concepts through the simulation."),
           br(),
-          
+
           ##### Go Button--location will depend on your goals
           div(
             style = "text-align: center;",
@@ -108,56 +105,56 @@ ui <- list(
           p("In order to get the most out of this app, please review the
             following:"),
           tags$ul(
-            tags$li("A linear regression model with multiplicative interaction 
-                    for a response,",tags$em("Y")," with explanatory variables 
+            tags$li("A linear regression model with multiplicative interaction
+                    for a response,",tags$em("Y")," with explanatory variables
                     \\(X_1\\) and \\(X_2\\) takes the form:"),
-            p("\\[E(Y) = \\beta_0 + \\beta_1 X_1 + \\beta_2 X_2 + 
+            p("\\[E(Y) = \\beta_0 + \\beta_1 X_1 + \\beta_2 X_2 +
               \\beta_3(X_1 X_2)\\]"),
-            p("So that the intercept \\(\\beta_0\\)  is the expected response 
+            p("So that the intercept \\(\\beta_0\\)  is the expected response
               when both \\(X_1\\) and \\(X_2\\) are zero;"),
             p("\\(\\beta_1\\) is the increase in the average value of ",
-              tags$em("Y")," per unit of \\(X_1\\) when \\(\\beta_3\\) and/or 
-              \\(X_2\\) is zero, (if you hold \\(X_2\\) fixed at some non-zero 
-              level \\(X_2\\) then the average value of ",tags$em("Y")," 
-              changes by \\(\\beta_1\\) + \\(\\beta_3\\ (X_2\\) per unit 
+              tags$em("Y")," per unit of \\(X_1\\) when \\(\\beta_3\\) and/or
+              \\(X_2\\) is zero, (if you hold \\(X_2\\) fixed at some non-zero
+              level \\(X_2\\) then the average value of ",tags$em("Y"),"
+              changes by \\(\\beta_1\\) + \\(\\beta_3\\ (X_2\\) per unit
               of \\(X_1\\));"),
             p("\\(\\beta_2\\) is the increase in the average value of ",
-              tags$em("Y")," per unit of \\(X_2\\) when \\(\\beta_3\\) 
-              and/or \\(X_1\\) is zero, (if you hold \\(X_1\\) fixed at 
+              tags$em("Y")," per unit of \\(X_2\\) when \\(\\beta_3\\)
+              and/or \\(X_1\\) is zero, (if you hold \\(X_1\\) fixed at
               some non-zero level \\(X_1\\) then the average value of ",
-              tags$em("Y")," changes by \\(\\beta_2\\) + \\(\\beta_3\\ 
+              tags$em("Y")," changes by \\(\\beta_2\\) + \\(\\beta_3\\
               (X_1\\) per unit of \\(X_2\\))."),
-            p("Interpretation: When there is an interaction in the model, 
-              the degree to which a change in one of the X variables affects 
-              the expectation of ",tags$em("Y")," depends on the other X 
-              variable. The coefficient \\(\\beta_3\\) tells you how strong 
+            p("Interpretation: When there is an interaction in the model,
+              the degree to which a change in one of the X variables affects
+              the expectation of ",tags$em("Y")," depends on the other X
+              variable. The coefficient \\(\\beta_3\\) tells you how strong
               that dependency is."),
-            tags$li("Special case: Suppose \\(X_2\\) is a binary variable that =1 if an 
-        event “A” happens and = 0 if it doesn’t. \\(E(Y) = (\\beta_0 + 
-        \\beta_2)+ (\\beta_1 + \\beta_3) X_1\\) 
-        when A happens and\\(E(Y) = \\beta_0 + \\beta_1 X_1\\) 
+            tags$li("Special case: Suppose \\(X_2\\) is a binary variable that =1 if an
+        event “A” happens and = 0 if it doesn’t. \\(E(Y) = (\\beta_0 +
+        \\beta_2)+ (\\beta_1 + \\beta_3) X_1\\)
+        when A happens and\\(E(Y) = \\beta_0 + \\beta_1 X_1\\)
         when it doesn't"),
           ),
         tags$ul(
-          tags$li("Special case of the special case: Suppose both \\(X_1\\) and 
-          \\(X_2\\) are binary variables and \\(X_1\\)=1 if an event “B” 
+          tags$li("Special case of the special case: Suppose both \\(X_1\\) and
+          \\(X_2\\) are binary variables and \\(X_1\\)=1 if an event “B”
           happens and = 0 if it doesn’t."),
           p("In this case"),
-          p("\\(E(Y) = (\\beta_0 + \\beta_1  + \\beta_2  + \\beta_3)\\) when 
+          p("\\(E(Y) = (\\beta_0 + \\beta_1  + \\beta_2  + \\beta_3)\\) when
     A and B both happen"),
     p("\\(E(Y) = (\\beta_0 + \\beta_1 )\\) when B happens but A doesn't"),
     p("\\(E(Y) = (\\beta_0 + \\beta_2 )\\) when A happens but B doesn't"),
     p("\\(E(Y) = \\beta_0\\) when neither A nor B happen"),
         ),
     br(),
-    
+
     box(
       title = strong("Interpretation of the special case when \\(x_2\\) is binary"),
       status = "primary",
       collapsible = TRUE,
       collapsed = TRUE,
       width = '100%',
-      "The average value of Y is related to by one linear equation when A happens 
+      "The average value of Y is related to by one linear equation when A happens
   and by a different line when it doesn’t."
     ),
   box(
@@ -167,33 +164,33 @@ ui <- list(
     collapsible = TRUE,
     collapsed = TRUE,
     width = '100%',
-    "The average value of ",tags$em("Y")," changes by a constant amount that 
+    "The average value of ",tags$em("Y")," changes by a constant amount that
   depends on whether the events A and B happen or not."
   ),
         ),
-  
-  
+
+
   #### Set up an Example Page ----
   tabItem(
     tabName = "example",
     withMathJax(),
     h2("Example of Multiplicative Interaction"),
-    p("One type of interaction is multiplicative where the factors are multiplied 
-    together to form the interaction term. We study the depth of the lunar 
+    p("One type of interaction is multiplicative where the factors are multiplied
+    together to form the interaction term. We study the depth of the lunar
     craters and how that might be predicted by whether the crater is close or far
-    from the equator; whether the crater is in a Highland area or in a Mare; 
+    from the equator; whether the crater is in a Highland area or in a Mare;
     Diameter of the crater and the distance from lunar meridian."),
     br(),
-    h3("Instruction:"),
-    p("Select the type of interaction you want to explore, then view the 
-    corresponding summary table of coefficients. and try to identify 
+    h3("Instructions"),
+    p("Select the type of interaction you want to explore, then view the
+    corresponding summary table of coefficients. and try to identify
     if there is interaction for predicting depth.
     In addition, in this context, we treat Depth as dependent variable, which
     is the value we want to estimate. The other four variables are predictors.
     Absolute Distance from Meridian and Diameter are continuous variables,
     Distance from Equator and Region type are binary variables"),
     br(),
-    
+
     fluidRow(
       column(
         width = 4,
@@ -240,19 +237,19 @@ ui <- list(
   tabItem(
     tabName = "explore",
     withMathJax(),
-    
+
     h2("Explore"),
     p("Here, we will explore multiplicative interaction if a y variable same for
-    response variable Y, predicted by binary variable Distance from Equator 
-    and Region Type and continuous variable Diameter and Absolute 
+    response variable Y, predicted by binary variable Distance from Equator
+    and Region Type and continuous variable Diameter and Absolute
     Distance from Meridian."),
     br(),
-    h3("Instruction:"),
+    h3("Instructions"),
     p("In the explore page, you could use the Generate New Sample button to see
     the plot that generated by different random sample, one plot is the one with
     interaction term and the other plot is without interaction term. In addition,
     In the Binary & Continuous and Continuous & Continuous case, there is a slider
-    with the x value, and it correspond to the red vertical line. Move the slider 
+    with the x value, and it correspond to the red vertical line. Move the slider
     to explore"),
     br(),
     fluidPage(
@@ -270,10 +267,10 @@ ui <- list(
               #### input part----
               tags$strong("Type of interaction"),
               # radioButtons(
-              #   inputId = " Interactions between binary regressors", 
-              #   label = NULL, 
+              #   inputId = " Interactions between binary regressors",
+              #   label = NULL,
               #   choices = c(" Interactions between binary regressors"),
-              #   selected = " Interactions between binary regressors", 
+              #   selected = " Interactions between binary regressors",
               #   width = '100%'
               # ),
               p("Interactions between binary regressors"),
@@ -320,10 +317,10 @@ ui <- list(
               #### input part----
               tags$strong("Type of interaction"),
               # radioButtons(
-              #   inputId = "Interaction between binary variable and a continuous variable", 
-              #   label = NULL, 
+              #   inputId = "Interaction between binary variable and a continuous variable",
+              #   label = NULL,
               #   choices = c("Interaction between binary variable and a continuous variable"),
-              #   selected = "Interaction between binary variable and a continuous variable", 
+              #   selected = "Interaction between binary variable and a continuous variable",
               #   width = '100%'
               # ),
               p("Interaction between binary variable and a continuous variable"),
@@ -337,7 +334,7 @@ ui <- list(
                 value = 20
               ),
               br(),
-              
+
               bsButton(
                 inputId = "newSample2",
                 label = "Generate New Sample",
@@ -354,9 +351,9 @@ ui <- list(
             dataTableOutput("exploreSummary2"),
             br(),
           ),
-          
+
         ),
-        
+
         ##### Continuous & Continuous ----
         tabPanel(
           title = "Continuous & Continuous",
@@ -368,10 +365,10 @@ ui <- list(
               #### input part----
               tags$strong("Type of interaction"),
               # radioButtons(
-              #   inputId = "Interaction between two continuous regressors", 
-              #   label = NULL, 
+              #   inputId = "Interaction between two continuous regressors",
+              #   label = NULL,
               #   choices = c("Interaction between two continuous regressors"),
-              #   selected = "Interaction between two continuous regressors", 
+              #   selected = "Interaction between two continuous regressors",
               #   width = '100%'
               # ),
               p("Interaction between two continuous regressors"),
@@ -386,8 +383,8 @@ ui <- list(
                 value = 20
               ),
               br(),
-              
-              
+
+
               # Generate sample button
               bsButton(
                 inputId = "newSample3",
@@ -395,7 +392,7 @@ ui <- list(
                 icon = icon("retweet"),
                 size = "large"
               ),
-              
+
             )
           ),
           #### output part----
@@ -410,8 +407,8 @@ ui <- list(
       )
     )
   ),
-  
-  
+
+
   #### Set up the References Page ----
   tabItem(
     tabName = "references",
@@ -431,7 +428,7 @@ ui <- list(
     ),
     p(
       class = "hangingindent",
-      "Chang, W., and Borges Ribeiro, B. (2021). shinydashboard: Create 
+      "Chang, W., and Borges Ribeiro, B. (2021). shinydashboard: Create
             dashboards with 'shiny'. (v 0.7.2) [R package]. Available from
             https://CRAN.R-project.org/package=shinydashboard"
     ),
@@ -444,13 +441,13 @@ ui <- list(
     ),
     p(
       class = "hangingindent",
-      "Sun, S., et al. “Investigation of the Depth and Diameter Relationship 
-   of Subkilometer-Diameter Lunar Craters.??? Icarus, vol. 309, 15 July 2018, 
+      "Sun, S., et al. “Investigation of the Depth and Diameter Relationship
+   of Subkilometer-Diameter Lunar Craters.??? Icarus, vol. 309, 15 July 2018,
    pp. 61???68., https://doi.org/10.1016/j.icarus.2018.02.031. "
     ),
    p(
-     class = "hangingindent", 
-     "Victor, P., Fanny, M. and David, G. (2018). 
+     class = "hangingindent",
+     "Victor, P., Fanny, M. and David, G. (2018).
             shinyWidgets: Custom Inputs Widgets for Shiny.
             R package version 0.4.3."
    ),
@@ -462,21 +459,21 @@ ui <- list(
    ),
    p(
      class = "hangingindent",
-     "Wickham, H., Bryan, J. (2022). readxl: Read Excel Files. 
+     "Wickham, H., Bryan, J. (2022). readxl: Read Excel Files.
     https://readxl.tidyverse.org, https://github.com/tidyverse/readxl."
    ),
    p(
-     class = "hangingindent", 
+     class = "hangingindent",
      "Xie, Y., Sarma, A., Vogt, A., knitr: Provides a general=purpose tool for
             dynamic report generation in R using Literate Programming techniques."
    ),
    p(
      class = "hangingindent",
-     "Yihui, X., Joe, C. and Xianying, T. (2022). DT: A Wrapper of the 
+     "Yihui, X., Joe, C. and Xianying, T. (2022). DT: A Wrapper of the
             JavaScript Library 'DataTables'. R package version 0.21.
             https://CRAN.R-project.org/package=DT"
    ),
-   
+
    br(),
    br(),
    br(),
@@ -490,7 +487,8 @@ ui <- list(
 
 # Define server logic ----
 server <- function(input, output, session) {
-  
+  boastUtils::typesetMath(session = session)
+
   ## Set up Info button ----
   observeEvent(
     eventExpr = input$info,
@@ -504,7 +502,7 @@ server <- function(input, output, session) {
       )
     }
   )
-  
+
   ### explore button
   observeEvent(
     eventExpr = input$go1,
@@ -516,15 +514,15 @@ server <- function(input, output, session) {
       )
     }
   )
-  
+
   ## Example Page Elements ----
-  
+
   ### Update Horizontal and Color ----
   observeEvent(input$interactionType, {
-    
+
     freezeReactiveValue(input, "Horizontal")
     freezeReactiveValue(input, "Color")
-    
+
     if (input$interactionType == 1) {
       updateSelectInput(inputId = "Horizontal",  choices = "Distance from Equator")
       updateSelectInput(inputId = "Color",  choices = "Region")
@@ -535,7 +533,7 @@ server <- function(input, output, session) {
       updateSelectInput(inputId = "Horizontal", choices = c("Diameter(m)"))
       updateSelectInput(inputId = "Color", choices = c("Absolute Distance from Meridian"))
     }
-    
+
     ### Plot ----
     output$interactionPlotUI <- renderUI({
       if (input$interactionType == 1 ) {
@@ -546,13 +544,13 @@ server <- function(input, output, session) {
         plotOutput("plot3")
       }
     })
-    
-    
+
+
     ### exampleModel1
     if(input$interactionType == 1) {
       output$plot1<-renderPlot(
         expr = {
-          
+
           ggplot(
             data = SampleData2,
             mapping = aes(
@@ -574,15 +572,15 @@ server <- function(input, output, session) {
             theme(
               legend.position = "bottom",
               text=element_text(size=15))
-          
+
         })
     }
-    
-    
+
+
     ### exampleModel2
     if(input$interactionType == 2) {
       output$plot2<-renderPlot({
-        
+
         ggplot(
           data = SampleData2,
           mapping = aes(
@@ -602,16 +600,16 @@ server <- function(input, output, session) {
           geom_point() + geom_smooth(method = "lm", fill = NA)+
           theme(legend.position = "bottom",
                 text=element_text(size=15))
-        
+
       })
     }
-    
+
     ## exampleModel3
     test1 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian, data = SampleData2)
-    
+
     if(input$interactionType == 3) {
       output$plot3<-renderPlot({
-        
+
         test2 <- makePredictionData(test1)
         ggplot(
           data = SampleData2,
@@ -623,7 +621,7 @@ server <- function(input, output, session) {
           )
         )+
           geom_jitter()+
-          scale_color_gradient(low = "lightblue", high = "blue") +
+          scale_color_gradient(low = "steelblue3", high = "navyblue") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
@@ -647,7 +645,7 @@ server <- function(input, output, session) {
                 text=element_text(size=15))
       })
     }
-    
+
     ### Summary Table ----
     observeEvent(
       eventExpr = input$interactionType,
@@ -666,7 +664,7 @@ server <- function(input, output, session) {
             data = SampleData2)
         }
         exampleCoeff <- round(summary(exampleModel)$coefficients, digits = 4)
-        
+
         row.names(exampleCoeff) <- sapply(
           X = row.names(exampleCoeff),
           FUN = function(x) {
@@ -677,7 +675,7 @@ server <- function(input, output, session) {
             )
           }
         )
-        
+
         output$exampleSummary <- DT::renderDataTable(
           expr = exampleCoeff,
           caption = "Model Coefficients",
@@ -700,70 +698,69 @@ server <- function(input, output, session) {
       },
       ignoreNULL = TRUE
     )
-    
-    
-    
-    
+
+
+
+
     ### Data Interpretation ----
     observeEvent(
       eventExpr = input$interactionType,
       handlerExpr = {
         output$dataInterpretation <- renderUI({
           if (input$interactionType == 1) {
-            p("Based on the coefficient table, we can get the fitted value 
-          into our model: 
+            withMathJax(p("Based on the coefficient table, we can get the fitted value
+          into our model:
           \\[E(\\widehat{Y}) = 5.7944 - 0.5351 X_1 - 0.3428 X_2 + 1.7255(X_1 X_2)\\]
-          To test whether the interaction is significant, we study a 
-          hypothesis that \\(H_0\\): \\(\\beta_3=0\\) vs \\(H_1\\): 
-          \\(\\beta_3\\neq 0\\). The test statistic for this 
-          hypothesis is 0.644, and the p-value is 0.5246, so we fail to reject 
-          the null hypothesis, indicating the interaction term is not significant 
-          in this case.")
+          To test whether the interaction is significant, we study a
+          hypothesis that \\(H_0\\): \\(\\beta_3=0\\) vs \\(H_1\\):
+          \\(\\beta_3\\neq 0\\). The test statistic for this
+          hypothesis is 0.644, and the p-value is 0.5246, so we fail to reject
+          the null hypothesis, indicating the interaction term is not significant
+          in this case."))
           }else if (input$interactionType == 2) {
-            p("Based on the coefficient table, we can get the fitted value 
+            p("Based on the coefficient table, we can get the fitted value
           into our model:
            \\[E(\\widehat{Y}) = 0.03838 + 0.13798 X_1 - 2.72064 X_2 + 0.07432(X_1 X_2)\\]
-          To test whether the interaction is significant, we study a hypothesis 
-          that \\(H_0\\): \\(\\beta_3=0\\) vs \\(H_1\\): \\(\\beta_3\\neq 0\\). 
-          The test statistic for this hypothesis 
+          To test whether the interaction is significant, we study a hypothesis
+          that \\(H_0\\): \\(\\beta_3=0\\) vs \\(H_1\\): \\(\\beta_3\\neq 0\\).
+          The test statistic for this hypothesis
           is 2.717, and the p-value is 0.0112. Since the p-value is small,
-          we can reject the null hypothesis, indicating the interaction 
+          we can reject the null hypothesis, indicating the interaction
           term is significant in the binary & continuous interaction case.")
           } else if (input$interactionType == 3) {
-            p("Based on the coefficient table, we can get the fitted value 
+            p("Based on the coefficient table, we can get the fitted value
           into our model:
            \\[E(\\widehat{Y}) = 0.4975 + 0.1268 X_1 - 0.0240 X_2 + 0.0006(X_1 X_2)\\]
-          To test whether the interaction is significant, we study a 
-          hypothesis that, we make a hypothesis that 
+          To test whether the interaction is significant, we study a
+          hypothesis that, we make a hypothesis that
           \\(H_0\\): \\(\\beta_3=0\\) vs \\(H_1\\): \\(\\beta_3\\neq 0\\) .
-          The test statistic for this hypothesis is 2.246, and the p-value is 
+          The test statistic for this hypothesis is 2.246, and the p-value is
           0.0328. Since the p-value is small, we can reject the null hypothesis,
-          indicating the interaction term is significant in the continuous 
+          indicating the interaction term is significant in the continuous
           & continuous interaction case.")
           }
         })
         boastUtils::typesetMath(session = session)
       }
     )
-    boastUtils::typesetMath(session = session)
     r <- reactiveValues(notice = "")
     ## Explore Page ----
-    
+
     #### Create Sample Data
     observeEvent(
       eventExpr = input$newSample,
       handlerExpr = {
         r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 24),]
-        
-        
+
+
       },
       ignoreNULL = TRUE,
       ignoreInit = TRUE
     )
-    
+
     #### Display sample plot1
     output$graphDisplay1 <- renderPlot(
-      
+
       expr = {
         validate(
           need(
@@ -771,13 +768,13 @@ server <- function(input, output, session) {
             message = "Click on Generate New Sample to create a plot WITH interaction"
           )
         )
-        
+
         tempData=r$tempData
-        test11<- lm(Depth ~ Distance_from_Equator + Region+ 
-                      Distance_from_Equator:Region, 
+        test11<- lm(Depth ~ Distance_from_Equator + Region+
+                      Distance_from_Equator:Region,
                     data = tempData)
         test12<- makePredictionData(test11)
-        
+
         ggplot(
           data = tempData,
           mapping = aes(
@@ -812,24 +809,24 @@ server <- function(input, output, session) {
           theme(legend.position = "bottom",
                 text=element_text(size=15))+
           geom_vline(xintercept =as.numeric(input$x3),color="red")
-        
+
       }
     )
-    
+
     output$graphDisplay11 <- renderPlot(
-      
+
       expr = {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot 
+            message = "Click on Generate New Sample to create a plot
             WITHOUT interaction"
           )
         )
-        
-        
+
+
         tempData=r$tempData
-        
+
         fit1<- lm(Depth ~ Distance_from_Equator + Region,
                   data = tempData)
         Depth_pred1 <- predict(fit1, tempData)
@@ -851,29 +848,29 @@ server <- function(input, output, session) {
           theme(legend.position = "bottom",
                 text=element_text(size=15))+
           geom_vline(xintercept =as.numeric(input$x3),color="red")
-        
+
       }
     )
-    
-    
-    
-    
-    
+
+
+
+
+
     #### Display sample plot 2
     observeEvent(
       eventExpr = input$newSample2,
       handlerExpr = {
         r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 24),]
-        
-        
+
+
       },
       ignoreNULL = TRUE,
       ignoreInit = TRUE
     )
-    
-    
+
+
     output$graphDisplay2 <- renderPlot(
-      
+
       expr = {
         validate(
           need(
@@ -882,12 +879,12 @@ server <- function(input, output, session) {
             WITH interaction"
           )
         )
-        
+
         tempData=r$tempData
-        test21<- lm(Depth ~ Diameter + Distance_from_Equator+ 
+        test21<- lm(Depth ~ Diameter + Distance_from_Equator+
                       Diameter:Distance_from_Equator, data = tempData)
         test22<- makePredictionData(test21)
-        
+
         ggplot(
           data = tempData,
           mapping = aes(
@@ -921,7 +918,7 @@ server <- function(input, output, session) {
           theme(legend.position = "bottom",
                 text=element_text(size=15))+
           geom_vline(xintercept =as.numeric(input$x3),color="red")
-        
+
         # ggplot(
         #   data = tempData,
         #   mapping = aes(
@@ -942,21 +939,21 @@ server <- function(input, output, session) {
         #         text=element_text(size=15))+geom_vline(xintercept =as.numeric(input$x3),color="red")
       }
     )
-    
+
     output$graphDisplay22 <- renderPlot(
-      
+
       expr = {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot 
+            message = "Click on Generate New Sample to create a plot
             WITHOUT interaction"
           )
         )
-        
-        
+
+
         tempData=r$tempData
-        
+
         fit<- lm(Depth ~ Diameter + Distance_from_Equator,
                  data = tempData)
         Depth_pred <- predict(fit, tempData)
@@ -976,43 +973,43 @@ server <- function(input, output, session) {
           theme(legend.position = "bottom",
                 text=element_text(size=15))+
           geom_vline(xintercept =as.numeric(input$x3),color="red")
-        
+
       }
     )
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     #### Display sample plot 3
     observeEvent(
       eventExpr = input$newSample3,
       handlerExpr = {
         r$tempData <- Crater_Data2[sample(nrow(Crater_Data2), size = 24),]
-        
-        
+
+
       },
       ignoreNULL = TRUE,
       ignoreInit = TRUE
     )
-    
+
     output$graphDisplay3 <- renderPlot(
       expr = {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot 
+            message = "Click on Generate New Sample to create a plot
             WITH interaction"
           )
         )
-        
+
         tempData=r$tempData
-        
-        test31 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian, 
+
+        test31 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian,
                      data = tempData)
         test41<- makePredictionData(test31)
-        
+
         ggplot(
           data = tempData,
           mapping = aes(
@@ -1023,7 +1020,7 @@ server <- function(input, output, session) {
           )
         )+
           geom_jitter()+
-          scale_color_gradient(low = "lightblue", high = "blue") +
+          scale_color_gradient(low = "steelblue3", high = "navyblue") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
@@ -1045,31 +1042,31 @@ server <- function(input, output, session) {
           ) +
           theme(legend.position = "bottom",
                 text=element_text(size=15))+
-          geom_vline(xintercept =as.numeric(input$x33), 
+          geom_vline(xintercept =as.numeric(input$x33),
                      color="red")
-        
+
       }
     )
-    
-    
+
+
     output$graphDisplay33 <- renderPlot(
-      
+
       expr = {
         validate(
           need(
             expr = !is.null(r$tempData),
-            message = "Click on Generate New Sample to create a plot 
+            message = "Click on Generate New Sample to create a plot
             WITHOUT interaction"
           )
         )
-        
+
         tempData=r$tempData
-        
-        
-        test32 <- lm(Depth ~ Diameter + Absolute_Distance_from_Meridian, 
+
+
+        test32 <- lm(Depth ~ Diameter + Absolute_Distance_from_Meridian,
                      data = tempData)
         test42<- makePredictionData(test32)
-        
+
         ggplot(
           data = tempData,
           mapping = aes(
@@ -1080,7 +1077,7 @@ server <- function(input, output, session) {
           )
         )+
           geom_jitter()+
-          scale_color_gradient(low = "lightblue", high = "blue") +
+          scale_color_gradient(low = "steelblue3", high = "navyblue") +
           theme_bw()+
           geom_smooth(
             inherit.aes = FALSE,
@@ -1103,28 +1100,28 @@ server <- function(input, output, session) {
           theme(legend.position = "bottom",
                 text=element_text(size=15))+
           geom_vline(xintercept =as.numeric(input$x33),color="red")
-        
+
       }
     )
     observeEvent(
       eventExpr = input$newSample,
       handlerExpr = {
         output$exploreSummary1 <- DT::renderDataTable({
-          
+
           tempData=r$tempData
-          test11<- lm(Depth ~ Distance_from_Equator + Region+ 
-                        Distance_from_Equator:Region, 
+          test11<- lm(Depth ~ Distance_from_Equator + Region+
+                        Distance_from_Equator:Region,
                       data = tempData)
           test12<- predict(test11, tempData)
           fit1<- lm(Depth ~ Distance_from_Equator + Region,
                     data = tempData)
           Depth_pred1 <- predict(fit1, tempData)
-          
+
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
           colnames(pred)<-c("predict with interaction",
                             "predict without interaction")
-          
+
           datatable(
             pred,
             caption = "Model prediction with and without interaction",
@@ -1145,18 +1142,18 @@ server <- function(input, output, session) {
             )
           )
         })
-        
+
         output$exploreSummary2 <- DT::renderDataTable({
-          
+
           tempData=r$tempData
-          test21<- lm(Depth ~ Diameter + Distance_from_Equator+ 
+          test21<- lm(Depth ~ Diameter + Distance_from_Equator+
                         Diameter:Distance_from_Equator, data = tempData)
-          
+
           test12<- predict(test21, tempData)
           fit<- lm(Depth ~ Diameter + Distance_from_Equator,
                    data = tempData)
           Depth_pred1 <- predict(fit, tempData)
-          
+
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
           colnames(pred)<-c("predict with interaction","predict without interaction")
@@ -1180,19 +1177,19 @@ server <- function(input, output, session) {
             )
           )
         })
-        
-        
+
+
         output$exploreSummary3<- DT::renderDataTable({
-          
+
           tempData=r$tempData
-          test31 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian, 
+          test31 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian,
                        data = tempData)
-          
+
           pred1<- predict(test31, tempData)
-          test32 <- lm(Depth ~ Diameter + Absolute_Distance_from_Meridian, 
+          test32 <- lm(Depth ~ Diameter + Absolute_Distance_from_Meridian,
                        data = tempData)
           pred2 <- predict(test32 , tempData)
-          
+
           pred<-data.frame(`predict with interaction`=round(pred1,2),
                            `predict without interaction`=round(pred2,2))
           colnames(pred)<-c("predict with interaction","predict without interaction")
@@ -1217,11 +1214,11 @@ server <- function(input, output, session) {
           )
         })
       })
-    
-    
-    
-    
-    
+
+
+
+
+
     ## PREDICTED VALUE TABLE----
     # observeEvent(
     #   eventExpr = input$newSample,
@@ -1240,7 +1237,7 @@ server <- function(input, output, session) {
     #     prediction2 <- predict(modelwithout, newdata = data1,
     #                            type = "response", se.fit = FALSE)
     #     predictionTable1<- rbind(prediction1, prediction2)
-    # 
+    #
     #     output$exploreSummary1 <- DT::renderDataTable(
     #       expr = predictionTable1,
     #       caption = "Predicted value with and without interaction",
@@ -1262,7 +1259,7 @@ server <- function(input, output, session) {
     #     )
     #     }
     # )
-    # 
+    #
     # ## output table
     # observeEvent(
     #   eventExpr = input$newSample,
@@ -1272,7 +1269,7 @@ server <- function(input, output, session) {
     #         formula = Depth ~ Distance_from_Equator + Region + Distance_from_Equator:Region,
     #         data = r$tempData)
     #       exampleCoeff1<- round(summary(exampleModel)$coefficients, digits = 4)
-    # 
+    #
     #       row.names(exampleCoeff1) <- sapply(
     #         X = row.names(exampleCoeff1),
     #         FUN = function(x) {
@@ -1283,7 +1280,7 @@ server <- function(input, output, session) {
     #           )
     #         }
     #       )
-    # 
+    #
     #       datatable(
     #         exampleCoeff1,
     #         caption = "Model Coefficients with interaction",
@@ -1304,14 +1301,14 @@ server <- function(input, output, session) {
     #         )
     #       )
     #     })
-    # 
-    # 
+    #
+    #
     #     output$exploreSummary11 <- DT::renderDataTable({
     #       exampleModel <- lm(
     #         formula = Depth ~ Distance_from_Equator + Region,
     #         data =  r$tempData)
     #       exampleCoeff1<- round(summary(exampleModel)$coefficients, digits = 4)
-    # 
+    #
     #       row.names(exampleCoeff1) <- sapply(
     #         X = row.names(exampleCoeff1),
     #         FUN = function(x) {
@@ -1322,7 +1319,7 @@ server <- function(input, output, session) {
     #           )
     #         }
     #       )
-    # 
+    #
     #       datatable(
     #         exampleCoeff1,
     #         caption = "Model Coefficients without interaction",
@@ -1343,17 +1340,17 @@ server <- function(input, output, session) {
     #         )
     #       )
     #     })
-    # 
-    # 
-    # 
-    # 
+    #
+    #
+    #
+    #
     #     output$exploreSummary2 <- DT::renderDataTable({
-    # 
+    #
     #       exampleModel <- lm(
     #         formula = Depth ~ Diameter * Distance_from_Equator,
     #         data = r$tempData)
     #       exampleCoeff2<- round(summary(exampleModel)$coefficients, digits = 4)
-    # 
+    #
     #       row.names(exampleCoeff2) <- sapply(
     #         X = row.names(exampleCoeff2),
     #         FUN = function(x) {
@@ -1364,7 +1361,7 @@ server <- function(input, output, session) {
     #           )
     #         }
     #       )
-    # 
+    #
     #       datatable(
     #         exampleCoeff2,
     #         caption = "Model Coefficients with interaction",
@@ -1385,14 +1382,14 @@ server <- function(input, output, session) {
     #         )
     #       )
     #     })
-    # 
+    #
     #     output$exploreSummary22 <- DT::renderDataTable({
-    # 
+    #
     #       exampleModel <- lm(
     #         formula = Depth ~ Diameter + Distance_from_Equator,
     #         data = r$tempData)
     #       exampleCoeff2<- round(summary(exampleModel)$coefficients, digits = 4)
-    # 
+    #
     #       row.names(exampleCoeff2) <- sapply(
     #         X = row.names(exampleCoeff2),
     #         FUN = function(x) {
@@ -1403,7 +1400,7 @@ server <- function(input, output, session) {
     #           )
     #         }
     #       )
-    # 
+    #
     #       datatable(
     #         exampleCoeff2,
     #         caption = "Model Coefficients without interaction",
@@ -1428,9 +1425,9 @@ server <- function(input, output, session) {
     #       exampleModel <- lm(
     #         formula = Depth ~ Diameter * Absolute_Distance_from_Meridian,
     #         data = r$tempData)
-    # 
+    #
     #       exampleCoeff3<- round(summary(exampleModel)$coefficients, digits = 4)
-    # 
+    #
     #       row.names(exampleCoeff3) <- sapply(
     #         X = row.names(exampleCoeff3),
     #         FUN = function(x) {
@@ -1501,7 +1498,7 @@ server <- function(input, output, session) {
     #   ignoreInit = TRUE
     # )
   })
-}      
+}
 
 
 # Boast App Call ----

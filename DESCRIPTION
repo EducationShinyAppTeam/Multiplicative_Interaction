@@ -5,7 +5,7 @@ Lifecycle: experimental
 Authors@R: c(
   person(given = "Xinyue", family = "Tang", email = "xft5034@psu.edu", role = c("aut")),
   person(given = "Neil", family = "Hatfield", email = "neil.hatfield@psu.edu", role = c("aut", "cre")),
-  person(given = "Dennis Keith", family = "Pearl", email = "dkp13@psu.edu", role = c("cre")))
+  person(given = "Dennis", family = "Pearl", email = "dkp13@psu.edu", role = c("cre")))
 Chapter: Chapter 6
 Description: This app is focused on the Multiplicative Interaction.
 LearningObjectives: c(
