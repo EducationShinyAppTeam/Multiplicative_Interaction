@@ -132,356 +132,356 @@ ui <- list(
               the expectation of ",tags$em("Y")," depends on the other X 
               variable. The coefficient \\(\\beta_3\\) tells you how strong 
               that dependency is."),
-tags$li("Special case: Suppose \\(X_2\\) is a binary variable that =1 if an 
+            tags$li("Special case: Suppose \\(X_2\\) is a binary variable that =1 if an 
         event “A” happens and = 0 if it doesn’t. \\(E(Y) = (\\beta_0 + 
         \\beta_2)+ (\\beta_1 + \\beta_3) X_1\\) 
         when A happens and\\(E(Y) = \\beta_0 + \\beta_1 X_1\\) 
         when it doesn't"),
           ),
-tags$ul(
-  tags$li("Special case of the special case: Suppose both \\(X_1\\) and 
+        tags$ul(
+          tags$li("Special case of the special case: Suppose both \\(X_1\\) and 
           \\(X_2\\) are binary variables and \\(X_1\\)=1 if an event “B” 
           happens and = 0 if it doesn’t."),
-  p("In this case"),
-  p("\\(E(Y) = (\\beta_0 + \\beta_1  + \\beta_2  + \\beta_3)\\) when 
+          p("In this case"),
+          p("\\(E(Y) = (\\beta_0 + \\beta_1  + \\beta_2  + \\beta_3)\\) when 
     A and B both happen"),
-  p("\\(E(Y) = (\\beta_0 + \\beta_1 )\\) when B happens but A doesn't"),
-  p("\\(E(Y) = (\\beta_0 + \\beta_2 )\\) when A happens but B doesn't"),
-  p("\\(E(Y) = \\beta_0\\) when neither A nor B happen"),
-),
-br(),
-
-box(
-  title = strong("Interpretation of the special case when \\(x_2\\) is binary"),
-  status = "primary",
-  collapsible = TRUE,
-  collapsed = TRUE,
-  width = '100%',
-  "The average value of Y is related to by one linear equation when A happens 
-  and by a different line when it doesn’t."
-),
-box(
-  title = strong("Interpretation on special case of the special case when both
-                 \\(x_1\\) and \\(x_2\\) are binary "),
-  status = "primary",
-  collapsible = TRUE,
-  collapsed = TRUE,
-  width = '100%',
-  "The average value of ",tags$em("Y")," changes by a constant amount that 
-  depends on whether the events A and B happen or not."
-),
+    p("\\(E(Y) = (\\beta_0 + \\beta_1 )\\) when B happens but A doesn't"),
+    p("\\(E(Y) = (\\beta_0 + \\beta_2 )\\) when A happens but B doesn't"),
+    p("\\(E(Y) = \\beta_0\\) when neither A nor B happen"),
         ),
-
-
-#### Set up an Example Page ----
-tabItem(
-  tabName = "example",
-  withMathJax(),
-  h2("Example of Multiplicative Interaction"),
-  p("One type of interaction is multiplicative where the factors are multiplied 
+    br(),
+    
+    box(
+      title = strong("Interpretation of the special case when \\(x_2\\) is binary"),
+      status = "primary",
+      collapsible = TRUE,
+      collapsed = TRUE,
+      width = '100%',
+      "The average value of Y is related to by one linear equation when A happens 
+  and by a different line when it doesn’t."
+    ),
+  box(
+    title = strong("Interpretation on special case of the special case when both
+                 \\(x_1\\) and \\(x_2\\) are binary "),
+    status = "primary",
+    collapsible = TRUE,
+    collapsed = TRUE,
+    width = '100%',
+    "The average value of ",tags$em("Y")," changes by a constant amount that 
+  depends on whether the events A and B happen or not."
+  ),
+        ),
+  
+  
+  #### Set up an Example Page ----
+  tabItem(
+    tabName = "example",
+    withMathJax(),
+    h2("Example of Multiplicative Interaction"),
+    p("One type of interaction is multiplicative where the factors are multiplied 
     together to form the interaction term. We study the depth of the lunar 
     craters and how that might be predicted by whether the crater is close or far
     from the equator; whether the crater is in a Highland area or in a Mare; 
     Diameter of the crater and the distance from lunar meridian."),
-  br(),
-  h3("Instruction:"),
-  p("Select the type of interaction you want to explore, then view the 
+    br(),
+    h3("Instruction:"),
+    p("Select the type of interaction you want to explore, then view the 
     corresponding summary table of coefficients. and try to identify 
     if there is interaction for predicting depth.
     In addition, in this context, we treat Depth as dependent variable, which
     is the value we want to estimate. The other four variables are predictors.
     Absolute Distance from Meridian and Diameter are continuous variables,
     Distance from Equator and Region type are binary variables"),
-  br(),
-  
-  fluidRow(
-    column(
-      width = 4,
-      wellPanel(
-        selectInput(
-          inputId = "interactionType",
-          label = "Type of interaction",
-          choices = c(
-            # " ",
-            "Binary & Binary" = 1,
-            "Binary & Continuous" = 2,
-            "Continuous & Continuous" = 3
-          )
+    br(),
+    
+    fluidRow(
+      column(
+        width = 4,
+        wellPanel(
+          selectInput(
+            inputId = "interactionType",
+            label = "Type of interaction",
+            choices = c(
+              # " ",
+              "Binary & Binary" = 1,
+              "Binary & Continuous" = 2,
+              "Continuous & Continuous" = 3
+            )
+          ),
+          # selectInput(
+          #   inputId = "Horizontal",
+          #   label = "Horizontal",
+          #   choices = c("Region(binary)",
+          #               "Distance_from_Equator(binary)",
+          #               "Diameter(continuous)",
+          #               "Absolute_Distance_from_Meridian(continuous)")
+          # ),
+          # selectInput(
+          #   inputId = "Color",
+          #   label = "Color",
+          #   choices = c("Region(binary)",
+          #               "Distance_from_Equator(binary)",
+          #               "Diameter(continuous)",
+          #               "Absolute_Distance_from_Meridian(continuous)"),
+          # )
         ),
-        # selectInput(
-        #   inputId = "Horizontal",
-        #   label = "Horizontal",
-        #   choices = c("Region(binary)",
-        #               "Distance_from_Equator(binary)",
-        #               "Diameter(continuous)",
-        #               "Absolute_Distance_from_Meridian(continuous)")
-        # ),
-        # selectInput(
-        #   inputId = "Color",
-        #   label = "Color",
-        #   choices = c("Region(binary)",
-        #               "Distance_from_Equator(binary)",
-        #               "Diameter(continuous)",
-        #               "Absolute_Distance_from_Meridian(continuous)"),
-        # )
       ),
-    ),
-    column(
-      width = 8,
-      # plotOutput("plot1")
-      uiOutput("interactionPlotUI"),
-      dataTableOutput("exampleSummary"),
-      uiOutput("dataInterpretation"),
-      br(),
+      column(
+        width = 8,
+        # plotOutput("plot1")
+        uiOutput("interactionPlotUI"),
+        dataTableOutput("exampleSummary"),
+        uiOutput("dataInterpretation"),
+        br(),
+      )
     )
-  )
-),
-#### Set up an Explore Page ----
-tabItem(
-  tabName = "explore",
-  withMathJax(),
-  
-  h2("Explore"),
-  p("Here, we will explore multiplicative interaction if a y variable same for
+  ),
+  #### Set up an Explore Page ----
+  tabItem(
+    tabName = "explore",
+    withMathJax(),
+    
+    h2("Explore"),
+    p("Here, we will explore multiplicative interaction if a y variable same for
     response variable Y, predicted by binary variable Distance from Equator 
     and Region Type and continuous variable Diameter and Absolute 
     Distance from Meridian."),
-  br(),
-  h3("Instruction:"),
-  p("In the explore page, you could use the Generate New Sample button to see
+    br(),
+    h3("Instruction:"),
+    p("In the explore page, you could use the Generate New Sample button to see
     the plot that generated by different random sample, one plot is the one with
     interaction term and the other plot is without interaction term. In addition,
     In the Binary & Continuous and Continuous & Continuous case, there is a slider
     with the x value, and it correspond to the red vertical line. Move the slider 
     to explore"),
-  br(),
-  fluidPage(
-    tabsetPanel(
-      id = "whichtype",
-      type = "tabs",
-      ##### Binary & Binary ----
-      tabPanel(
-        title = "Binary & Binary",
-        br(),
-        column(
-          width = 4,
-          offset = 0,
-          wellPanel(
-            #### input part----
-            tags$strong("Type of interaction"),
-            # radioButtons(
-            #   inputId = " Interactions between binary regressors", 
-            #   label = NULL, 
-            #   choices = c(" Interactions between binary regressors"),
-            #   selected = " Interactions between binary regressors", 
-            #   width = '100%'
-            # ),
-            p("Interactions between binary regressors"),
-            p("Distance from Equator and Region Type are two binary regressors."),
-            p("Close to Equator = 0"),
-            p("Far from Equator = 1"),
-            p("Highland = 0"),
-            p("Mare = 1"),
-            # tags$strong("x value"),
-            # sliderInput(
-            #   inputId = "x11",
-            #   label = "Distance from Meridian",
-            #   min = 0,
-            #   max = 1,
-            #   step = 1,
-            #   value =0
-            # ),
-            br(),
-            bsButton(
-              inputId = "newSample",
-              label = "Generate New Sample",
-              icon = icon("retweet"),
-              size = "large"
+    br(),
+    fluidPage(
+      tabsetPanel(
+        id = "whichtype",
+        type = "tabs",
+        ##### Binary & Binary ----
+        tabPanel(
+          title = "Binary & Binary",
+          br(),
+          column(
+            width = 4,
+            offset = 0,
+            wellPanel(
+              #### input part----
+              tags$strong("Type of interaction"),
+              # radioButtons(
+              #   inputId = " Interactions between binary regressors", 
+              #   label = NULL, 
+              #   choices = c(" Interactions between binary regressors"),
+              #   selected = " Interactions between binary regressors", 
+              #   width = '100%'
+              # ),
+              p("Interactions between binary regressors"),
+              p("Distance from Equator and Region Type are two binary regressors."),
+              p("Close to Equator = 0"),
+              p("Far from Equator = 1"),
+              p("Highland = 0"),
+              p("Mare = 1"),
+              # tags$strong("x value"),
+              # sliderInput(
+              #   inputId = "x11",
+              #   label = "Distance from Meridian",
+              #   min = 0,
+              #   max = 1,
+              #   step = 1,
+              #   value =0
+              # ),
+              br(),
+              bsButton(
+                inputId = "newSample",
+                label = "Generate New Sample",
+                icon = icon("retweet"),
+                size = "large"
+              )
             )
+          ),
+          #### output part----
+          column(
+            width = 8,
+            plotOutput("graphDisplay1" ),
+            plotOutput("graphDisplay11" ),
+            dataTableOutput("exploreSummary1"),
+            br(),
           )
         ),
-        #### output part----
-        column(
-          width = 8,
-          plotOutput("graphDisplay1" ),
-          plotOutput("graphDisplay11" ),
-          dataTableOutput("exploreSummary1"),
+        ##### Binary & Continuous ----
+        tabPanel(
+          title = "Binary & Continuous",
           br(),
-        )
-      ),
-      ##### Binary & Continuous ----
-      tabPanel(
-        title = "Binary & Continuous",
-        br(),
-        column(
-          width = 4,
-          offset = 0,
-          wellPanel(
-            #### input part----
-            tags$strong("Type of interaction"),
-            # radioButtons(
-            #   inputId = "Interaction between binary variable and a continuous variable", 
-            #   label = NULL, 
-            #   choices = c("Interaction between binary variable and a continuous variable"),
-            #   selected = "Interaction between binary variable and a continuous variable", 
-            #   width = '100%'
-            # ),
-            p("Interaction between binary variable and a continuous variable"),
-            tags$strong("x value"),
-            sliderInput(
-              inputId = "x3",
-              label = "Diameter",
-              min = 0,
-              max = 100,
-              step = 1,
-              value = 20
-            ),
-            br(),
-            
-            bsButton(
-              inputId = "newSample2",
-              label = "Generate New Sample",
-              icon = icon("retweet"),
-              size = "large"
+          column(
+            width = 4,
+            offset = 0,
+            wellPanel(
+              #### input part----
+              tags$strong("Type of interaction"),
+              # radioButtons(
+              #   inputId = "Interaction between binary variable and a continuous variable", 
+              #   label = NULL, 
+              #   choices = c("Interaction between binary variable and a continuous variable"),
+              #   selected = "Interaction between binary variable and a continuous variable", 
+              #   width = '100%'
+              # ),
+              p("Interaction between binary variable and a continuous variable"),
+              tags$strong("x value"),
+              sliderInput(
+                inputId = "x3",
+                label = "Diameter",
+                min = 0,
+                max = 100,
+                step = 1,
+                value = 20
+              ),
+              br(),
+              
+              bsButton(
+                inputId = "newSample2",
+                label = "Generate New Sample",
+                icon = icon("retweet"),
+                size = "large"
+              ),
             ),
           ),
-        ),
-        #### output part----
-        column(
-          width = 8,
-          plotOutput("graphDisplay2" ),
-          plotOutput("graphDisplay22" ),
-          dataTableOutput("exploreSummary2"),
-          br(),
+          #### output part----
+          column(
+            width = 8,
+            plotOutput("graphDisplay2" ),
+            plotOutput("graphDisplay22" ),
+            dataTableOutput("exploreSummary2"),
+            br(),
+          ),
+          
         ),
         
-      ),
-      
-      ##### Continuous & Continuous ----
-      tabPanel(
-        title = "Continuous & Continuous",
-        br(),
-        column(
-          width = 4,
-          offset = 0,
-          wellPanel(
-            #### input part----
-            tags$strong("Type of interaction"),
-            # radioButtons(
-            #   inputId = "Interaction between two continuous regressors", 
-            #   label = NULL, 
-            #   choices = c("Interaction between two continuous regressors"),
-            #   selected = "Interaction between two continuous regressors", 
-            #   width = '100%'
-            # ),
-            p("Interaction between two continuous regressors"),
-            #x3
-            tags$strong("x value"),
-            sliderInput(
-              inputId = "x33",
-              label = "diameter",
-              min = 0,
-              max = 100,
-              step = 1,
-              value = 20
-            ),
+        ##### Continuous & Continuous ----
+        tabPanel(
+          title = "Continuous & Continuous",
+          br(),
+          column(
+            width = 4,
+            offset = 0,
+            wellPanel(
+              #### input part----
+              tags$strong("Type of interaction"),
+              # radioButtons(
+              #   inputId = "Interaction between two continuous regressors", 
+              #   label = NULL, 
+              #   choices = c("Interaction between two continuous regressors"),
+              #   selected = "Interaction between two continuous regressors", 
+              #   width = '100%'
+              # ),
+              p("Interaction between two continuous regressors"),
+              #x3
+              tags$strong("x value"),
+              sliderInput(
+                inputId = "x33",
+                label = "diameter",
+                min = 0,
+                max = 100,
+                step = 1,
+                value = 20
+              ),
+              br(),
+              
+              
+              # Generate sample button
+              bsButton(
+                inputId = "newSample3",
+                label = "Generate New Sample",
+                icon = icon("retweet"),
+                size = "large"
+              ),
+              
+            )
+          ),
+          #### output part----
+          column(
+            width = 8,
+            plotOutput("graphDisplay3" ),
+            plotOutput("graphDisplay33" ),
+            dataTableOutput("exploreSummary3"),
             br(),
-            
-            
-            # Generate sample button
-            bsButton(
-              inputId = "newSample3",
-              label = "Generate New Sample",
-              icon = icon("retweet"),
-              size = "large"
-            ),
-            
           )
         ),
-        #### output part----
-        column(
-          width = 8,
-          plotOutput("graphDisplay3" ),
-          plotOutput("graphDisplay33" ),
-          dataTableOutput("exploreSummary3"),
-          br(),
-        )
-      ),
+      )
     )
-  )
-),
-
-
-#### Set up the References Page ----
-tabItem(
-  tabName = "references",
-  withMathJax(),
-  h2("References"),
-  p(
-    class = "hangingindent",
-    "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
+  ),
+  
+  
+  #### Set up the References Page ----
+  tabItem(
+    tabName = "references",
+    withMathJax(),
+    h2("References"),
+    p(
+      class = "hangingindent",
+      "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
             (v0.61). [R package]. Available from
             https://CRAN.R-project.org/package=shinyBS"
-  ),
-  p(
-    class = "hangingindent",
-    "Carey, R. and Hatfield, N. (2022). boastUtils: BOAST utlities.
+    ),
+    p(
+      class = "hangingindent",
+      "Carey, R. and Hatfield, N. (2022). boastUtils: BOAST utlities.
             (v 0.1.12.3). [R package]. Available from
             https://github.com/EducationShinyAppTeam/boastUtils"
-  ),
-  p(
-    class = "hangingindent",
-    "Chang, W., and Borges Ribeiro, B. (2021). shinydashboard: Create 
+    ),
+    p(
+      class = "hangingindent",
+      "Chang, W., and Borges Ribeiro, B. (2021). shinydashboard: Create 
             dashboards with 'shiny'. (v 0.7.2) [R package]. Available from
             https://CRAN.R-project.org/package=shinydashboard"
-  ),
-  p(
-    class = "hangingindent",
-    "Chang, W., Cheng J., Allaire, J., Sievert, C., Schloerke, B., Xie, Y.,
+    ),
+    p(
+      class = "hangingindent",
+      "Chang, W., Cheng J., Allaire, J., Sievert, C., Schloerke, B., Xie, Y.,
             Allen, J., McPherson, J., Dipert, A., and Borges, B. (2021). shiny:
             Web application framework for R. (v 1.7.1). [R package]. Available
             from https://CRAN.R-project.org/package=shiny"
-  ),
-  p(
-    class = "hangingindent",
-    "Sun, S., et al. “Investigation of the Depth and Diameter Relationship 
+    ),
+    p(
+      class = "hangingindent",
+      "Sun, S., et al. “Investigation of the Depth and Diameter Relationship 
    of Subkilometer-Diameter Lunar Craters.??? Icarus, vol. 309, 15 July 2018, 
    pp. 61???68., https://doi.org/10.1016/j.icarus.2018.02.031. "
-  ),
-  p(
-    class = "hangingindent", 
-    "Victor, P., Fanny, M. and David, G. (2018). 
+    ),
+   p(
+     class = "hangingindent", 
+     "Victor, P., Fanny, M. and David, G. (2018). 
             shinyWidgets: Custom Inputs Widgets for Shiny.
             R package version 0.4.3."
-  ),
-  p(
-    class = "hangingindent",
-    "Wickham, H. (2016). ggplot2: Elegant graphics for data analysis.
+   ),
+   p(
+     class = "hangingindent",
+     "Wickham, H. (2016). ggplot2: Elegant graphics for data analysis.
             Springer-Verlag:New York. (v 3.3.6) [R package]. Available from
             https://ggplot2.tidyverse.org"
-  ),
-  p(
-    class = "hangingindent",
-    "Wickham, H., Bryan, J. (2022). readxl: Read Excel Files. 
+   ),
+   p(
+     class = "hangingindent",
+     "Wickham, H., Bryan, J. (2022). readxl: Read Excel Files. 
     https://readxl.tidyverse.org, https://github.com/tidyverse/readxl."
-  ),
-  p(
-    class = "hangingindent", 
-    "Xie, Y., Sarma, A., Vogt, A., knitr: Provides a general=purpose tool for
+   ),
+   p(
+     class = "hangingindent", 
+     "Xie, Y., Sarma, A., Vogt, A., knitr: Provides a general=purpose tool for
             dynamic report generation in R using Literate Programming techniques."
-  ),
-  p(
-    class = "hangingindent",
-    "Yihui, X., Joe, C. and Xianying, T. (2022). DT: A Wrapper of the 
+   ),
+   p(
+     class = "hangingindent",
+     "Yihui, X., Joe, C. and Xianying, T. (2022). DT: A Wrapper of the 
             JavaScript Library 'DataTables'. R package version 0.21.
             https://CRAN.R-project.org/package=DT"
-  ),
-  
-  br(),
-  br(),
-  br(),
-  boastUtils::copyrightInfo()
-)
+   ),
+   
+   br(),
+   br(),
+   br(),
+   boastUtils::copyrightInfo()
+  )
       )
     )
   )
