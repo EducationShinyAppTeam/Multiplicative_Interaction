@@ -190,7 +190,7 @@ ui <- list(
       align = "center",
       tags$img(
         src = "Picture1.png",
-        width = 400,
+        width = 200,
       )
     ),
 
@@ -266,7 +266,7 @@ ui <- list(
     br(),
     h3("Instructions"),
     p("Use the Generate New Sample button to see plots for a different random
-      sample of 24 crators. One plot shows the fitted lines with an interaction
+      sample of 24 craters. One plot shows the fitted lines with an interaction
       term and the other plot shows the fitted lines without an interaction term.
       When there is a continuous variable on the x-axis you can move the slider
       to help focus on particular values and how the interaction and no
@@ -1141,7 +1141,7 @@ server <- function(input, output, session) {
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
 
-          colnames(pred)<-c("predict with interaction","predict without interaction")
+          colnames(pred)<-c("prediction with interaction","prediction without interaction")
           pred=cbind(tempData[,c("Region","Distance_from_Equator")],pred)
           colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
@@ -1178,7 +1178,7 @@ server <- function(input, output, session) {
 
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
-          colnames(pred)<-c("predict with interaction","predict without interaction")
+          colnames(pred)<-c("prediction with interaction","prediction without interaction")
           pred=cbind(tempData[,c("Diameter","Distance_from_Equator")],pred)
           colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
@@ -1216,7 +1216,7 @@ server <- function(input, output, session) {
 
           pred<-data.frame(`predict with interaction`=round(pred1,2),
                            `predict without interaction`=round(pred2,2))
-          colnames(pred)<-c("predict with interaction","predict without interaction")
+          colnames(pred)<-c("prediction with interaction","prediction without interaction")
           pred=cbind(tempData[,c("Diameter","Absolute_Distance_from_Meridian")],pred)
           colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
