@@ -10,7 +10,7 @@ Chapter: Chapter 6
 Description: This app is focused on the Multiplicative Interaction.
 LearningObjectives: c(
     "The student will learn to determine if there is an interaction in the plot.",
-    "The student will learn to understand the difference berween with interaction and without interaction.")
+    "The student will learn to understand the difference between with interaction and without interaction.")
 DisplayMode: Normal
 URL: https://psu-eberly.shinyapps.io/Multiplicative_Interaction
 BugReports: https://github.com/EducationShinyAppTeam/Multiplicative_Interaction/issues

@@ -8,4 +8,5 @@
 ![App Screenshot](../docs/Screenshot.png)
 
 # App Description
-APP_DESCRIPTION
+This app is focused on the Multiplicative Interaction. The student will learn to determine if there is an interaction in the plot and it can help students understand the difference between with interaction and without interaction.
+
