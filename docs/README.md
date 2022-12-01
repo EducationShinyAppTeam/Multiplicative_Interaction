@@ -5,7 +5,7 @@
 ![year](https://img.shields.io/badge/year-2022-lightgrey)
 ![new](https://img.shields.io/badge/lifecycle-newapp-brightgreen)
 
-![App Screenshot](../docs/Screenshot.png)
+![App Screenshot](../docs/screenshot.png)
 
 # App Description
 This app is focused on the Multiplicative Interaction. The student will learn to determine if there is an interaction in the plot and it can help students understand the difference between with interaction and without interaction.
