@@ -1123,6 +1123,7 @@ server <- function(input, output, session) {
 
       }
     )
+
     observeEvent(
       eventExpr = input$newSample,
       handlerExpr = {
@@ -1139,9 +1140,10 @@ server <- function(input, output, session) {
 
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
-          colnames(pred)<-c("predict with interaction",
-                            "predict without interaction")
 
+          colnames(pred)<-c("predict with interaction","predict without interaction")
+          pred=cbind(tempData[,c("Region","Distance_from_Equator")],pred)
+          colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
             pred,
             caption = "Model prediction with and without interaction",
@@ -1177,6 +1179,8 @@ server <- function(input, output, session) {
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
           colnames(pred)<-c("predict with interaction","predict without interaction")
+          pred=cbind(tempData[,c("Diameter","Distance_from_Equator")],pred)
+          colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
             pred,
             caption = "Model prediction with and without interaction",
@@ -1213,6 +1217,8 @@ server <- function(input, output, session) {
           pred<-data.frame(`predict with interaction`=round(pred1,2),
                            `predict without interaction`=round(pred2,2))
           colnames(pred)<-c("predict with interaction","predict without interaction")
+          pred=cbind(tempData[,c("Diameter","Absolute_Distance_from_Meridian")],pred)
+          colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
             pred,
             caption = "Model prediction with and without interaction",
