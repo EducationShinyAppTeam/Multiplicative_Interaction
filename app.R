@@ -86,7 +86,7 @@ ui <- list(
           br(),
           br(),
           h2("Acknowledgements"),
-          p( "This version of the app was developed and coded by Xinyue Tang ",
+          p( "This version of the app was developed and coded by Xinyue Tang, with updates by Xin Yun (2024). ",
              br(),
              br(),
              "Cite this app as:",
@@ -94,7 +94,7 @@ ui <- list(
              citeApp(),
              br(),
              br(),
-             div(class = "updated", "Last Update: 11/29/2022 by XYT.")
+             div(class = "updated", "Last Update: 6/02/2024 by XY.")
           )
         ),
         #### Set up the Prerequisites Page ----
