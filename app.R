@@ -461,9 +461,9 @@ ui <- list(
     ),
     p(
       class = "hangingindent",
-      "Sun, S., et al. “Investigation of the Depth and Diameter Relationship
-   of Subkilometer-Diameter Lunar Craters.??? Icarus, vol. 309, 15 July 2018,
-   pp. 61???68., https://doi.org/10.1016/j.icarus.2018.02.031. "
+      "Sun, S., Yue, Z., and Di, K. (2018), “Investigation of the depth and diameter relationship 
+      of subkilometer-diameter lunar craters,” Icarus, 309, 61–68. 
+      https://doi.org/10.1016/j.icarus.2018.02.031 "
     ),
    p(
      class = "hangingindent",
