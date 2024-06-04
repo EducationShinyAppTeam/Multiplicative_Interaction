@@ -350,7 +350,7 @@ ui <- list(
                 label = "Diameter",
                 min = 20,
                 max = 170,
-                step = 4,
+                step = 5,
                 value = 20
               ),
               br(),
@@ -399,7 +399,7 @@ ui <- list(
                 label = "diameter",
                 min = 20,
                 max = 170,
-                step = 4,
+                step = 5,
                 value = 20
               ),
               br(),
