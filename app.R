@@ -8,6 +8,7 @@ library(ggplot2)
 library(readxl)
 library(DT)
 
+
 ## Load in data
 SampleData2 <- read_excel("SampleData2.xlsx")
 
@@ -190,7 +191,8 @@ ui <- list(
       align = "center",
       tags$img(
         src = "Picture1.jpg",
-        width = 400,
+        width = 300,
+        (alt = "The Highlands And Mare of The Moon")
       )
     ),
 
