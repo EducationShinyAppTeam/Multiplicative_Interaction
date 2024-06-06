@@ -259,10 +259,10 @@ ui <- list(
     withMathJax(),
 
     h2("Explore"),
-    p("Here, we will explore multiplicative interaction if a y variable same for
-    response variable Y, predicted by binary variable Distance from Equator
-    and Region Type and continuous variable Diameter and Absolute
-    Distance from Meridian."),
+    p("Here, we will examine the multiplicative interactions of the X variables 
+    for the same response variable Y (depth of crater). This analysis will include
+    the binary variables Distance from Equator and Region Type, 
+    as well as the continuous variables Diameter and Absolute Distance from Meridian."),
     br(),
     h3("Instructions"),
     p("Use the Generate New Sample button to see plots for a different random
