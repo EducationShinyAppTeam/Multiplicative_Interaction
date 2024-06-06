@@ -189,8 +189,8 @@ ui <- list(
     tags$figure(
       align = "center",
       tags$img(
-        src = "Picture1.png",
-        width = 200,
+        src = "Picture1.jpg",
+        width = 400,
       )
     ),
 
@@ -458,6 +458,11 @@ ui <- list(
             Allen, J., McPherson, J., Dipert, A., and Borges, B. (2021). shiny:
             Web application framework for R. (v 1.7.1). [R package]. Available
             from https://CRAN.R-project.org/package=shiny"
+    ),
+    p(
+      class = "hangingindent",
+      "Hanmer, S. (2001). Moon I : Highlands & lowlands. 
+     https://www.simonhanmer52.ca/moon-i--highlands--lowlands.html "
     ),
     p(
       class = "hangingindent",

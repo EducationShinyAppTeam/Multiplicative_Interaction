@@ -6,7 +6,6 @@
 makePredictionData <- function(lm.obj, nLines = 4){
   # Extract Original Data
   originalData <- lm.obj$model
-  
   yName <- names(originalData)[1]
   x1Name <- names(originalData)[2]
   x2Name <- names(originalData)[3]
