@@ -192,8 +192,9 @@ ui <- list(
       tags$img(
         src = "Picture1.jpg",
         width = 300,
-        (alt = "The Highlands And Mare of The Moon")
-      )
+        alt = "The Highlands And Mare of The Moon"
+      ),
+      tags$figcaption("Image of Moon by Hanmer, 2001")
     ),
 
 
