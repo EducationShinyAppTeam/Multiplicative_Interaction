@@ -1149,7 +1149,7 @@ server <- function(input, output, session) {
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
 
-          colnames(pred)<-c("prediction with interaction","prediction without interaction")
+          colnames(pred)<-c("Prediction with interaction","Prediction without interaction")
           pred=cbind(tempData[,c("Region","Distance_from_Equator")],pred)
           colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
@@ -1189,7 +1189,7 @@ server <- function(input, output, session) {
           
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
-          colnames(pred)<-c("prediction with interaction","prediction without interaction")
+          colnames(pred)<-c("Prediction with interaction","Prediction without interaction")
           pred=cbind(tempData[,c("Diameter","Distance_from_Equator")],pred)
           colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
@@ -1230,7 +1230,7 @@ server <- function(input, output, session) {
           
           pred<-data.frame(`predict with interaction`=round(pred1,2),
                            `predict without interaction`=round(pred2,2))
-          colnames(pred)<-c("prediction with interaction","prediction without interaction")
+          colnames(pred)<-c("Prediction with interaction","Prediction without interaction")
           pred=cbind(tempData[,c("Diameter","Absolute_Distance_from_Meridian")],pred)
           colnames(pred)=gsub("_"," ",colnames(pred))
           datatable(
