@@ -1184,6 +1184,9 @@ server <- function(input, output, session) {
                    data = tempData)
           Depth_pred1 <- predict(fit, tempData)
 
+          tempData$Diameter <- round(tempData$Diameter, 2)
+          
+          
           pred<-data.frame(`predict with interaction`=round(test12,2),
                            `predict without interaction`=round(Depth_pred1,2))
           colnames(pred)<-c("prediction with interaction","prediction without interaction")
@@ -1222,6 +1225,9 @@ server <- function(input, output, session) {
                        data = tempData)
           pred2 <- predict(test32 , tempData)
 
+          tempData$Diameter <- round(tempData$Diameter, 2)
+          tempData$Absolute_Distance_from_Meridian <- round(tempData$Absolute_Distance_from_Meridian, 2)
+          
           pred<-data.frame(`predict with interaction`=round(pred1,2),
                            `predict without interaction`=round(pred2,2))
           colnames(pred)<-c("prediction with interaction","prediction without interaction")
