@@ -72,12 +72,12 @@ ui <- list(
           p("3. Explore the concepts through the simulation."),
           br(),
 
-          ##### Go Button--location will depend on your goals
+          ##### Prerequisites Button--location will depend on your goals
           div(
             style = "text-align: center;",
             bsButton(
-              inputId = "go1",
-              label = "GO!",
+              inputId = "prerequisites1",
+              label = "Prerequisites",
               size = "large",
               icon = icon("bolt"),
               style = "default"
@@ -533,7 +533,7 @@ server <- function(input, output, session) {
 
   ### explore button
   observeEvent(
-    eventExpr = input$go1,
+    eventExpr = input$prerequisites1,
     handlerExpr = {
       updateTabItems(
         session = session,
