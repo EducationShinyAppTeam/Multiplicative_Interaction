@@ -1131,7 +1131,7 @@ server <- function(input, output, session) {
 
       }
     )
-
+    #Generate data table 1
     observeEvent(
       eventExpr = input$newSample,
       handlerExpr = {
@@ -1172,18 +1172,23 @@ server <- function(input, output, session) {
             )
           )
         })
-
+        
+      })
+    #Generate data table 2
+    observeEvent(
+      eventExpr = input$newSample2,
+      handlerExpr = {
         output$exploreSummary2 <- DT::renderDataTable({
-
+          
           tempData=r$tempData
           test21<- lm(Depth ~ Diameter + Distance_from_Equator+
                         Diameter:Distance_from_Equator, data = tempData)
-
+          
           test12<- predict(test21, tempData)
           fit<- lm(Depth ~ Diameter + Distance_from_Equator,
                    data = tempData)
           Depth_pred1 <- predict(fit, tempData)
-
+          
           tempData$Diameter <- round(tempData$Diameter, 2)
           
           
@@ -1212,19 +1217,22 @@ server <- function(input, output, session) {
             )
           )
         })
-
-
+      })
+    #Generate data table 3
+    observeEvent(
+      eventExpr = input$newSample3,
+      handlerExpr = {
         output$exploreSummary3<- DT::renderDataTable({
-
+          
           tempData=r$tempData
           test31 <- lm(Depth ~ Diameter*Absolute_Distance_from_Meridian,
                        data = tempData)
-
+          
           pred1<- predict(test31, tempData)
           test32 <- lm(Depth ~ Diameter + Absolute_Distance_from_Meridian,
                        data = tempData)
           pred2 <- predict(test32 , tempData)
-
+          
           tempData$Diameter <- round(tempData$Diameter, 2)
           tempData$Absolute_Distance_from_Meridian <- round(tempData$Absolute_Distance_from_Meridian, 2)
           
@@ -1254,11 +1262,6 @@ server <- function(input, output, session) {
           )
         })
       })
-
-
-
-
-
     ## PREDICTED VALUE TABLE----
     # observeEvent(
     #   eventExpr = input$newSample,
