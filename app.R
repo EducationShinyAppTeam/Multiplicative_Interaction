@@ -79,7 +79,7 @@ ui <- list(
               inputId = "prerequisites1",
               label = "Prerequisites",
               size = "large",
-              icon = icon("bolt"),
+              icon = icon("book"),
               style = "default"
             )
           ),
