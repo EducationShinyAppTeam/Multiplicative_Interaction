@@ -192,7 +192,7 @@ ui <- list(
     tags$figure(
       align = "center",
       tags$img(
-        src = "Picture1.jpg",
+        src = "picture1.jpg",
         width = 300,
         alt = "The Highlands And Mare of The Moon"
       ),
